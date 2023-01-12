@@ -19,10 +19,9 @@ export default function Home() {
       </Head>
       <main style={{}}>
         <Header islogin={false} />
-        <Container sx={{textAlign: 'center'}} >
+        <Container sx={{ textAlign: 'center' }}>
           <Contents />
         </Container>
-        
       </main>
     </>
   )

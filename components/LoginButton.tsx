@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 const LoginButton: React.FC = () => {
   return (
     <>
-      <Button color='success' variant='contained' sx={{whiteSpace:'nowrap'}} size="large">
+      <Button color='success' variant='contained' sx={{ whiteSpace: 'nowrap' }} size='large'>
         ログイン
       </Button>
     </>
