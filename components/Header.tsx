@@ -113,15 +113,6 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static'>
         <Toolbar>
-          <IconButton
-            size='large'
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant='h6'
             noWrap
@@ -138,6 +129,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
           <SearchBar message='hello world' />
           <Box sx={{ flexGrow: 1 }} />
           {islogin ? (
+            <>
             <Box
               sx={{
                 display: {
@@ -168,10 +160,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
                 <AccountCircle />
               </IconButton>
             </Box>
-          ) : (
-            <LoginButton />
-          )}
-          <Box
+            <Box
             sx={{
               display: { xs: 'flex', md: 'none' },
             }}
@@ -187,6 +176,11 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
               <MoreIcon />
             </IconButton>
           </Box>
+            </>
+          ) : (
+            <LoginButton />
+          )}
+          
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

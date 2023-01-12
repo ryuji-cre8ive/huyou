@@ -4,6 +4,7 @@ import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import Header from '~/components/Header'
 import Contents from '~/components/Contents'
+import { Container } from '@mui/material'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,9 +17,12 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main style={{ margin: '0 auto' }}>
+      <main style={{}}>
         <Header islogin={false} />
-        <Contents />
+        <Container sx={{textAlign: 'center'}} >
+          <Contents />
+        </Container>
+        
       </main>
     </>
   )
