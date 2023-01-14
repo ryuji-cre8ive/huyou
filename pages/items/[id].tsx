@@ -3,12 +3,11 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { shopItemMock } from '../../tmpShopItem'
 import { ShopItemType } from 'interface/shop'
 import NextImage from 'next/image'
-import { Box, IconButton } from '@mui/material'
+import { Box, IconButton, Rating } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles'
-import {
-  FavoriteBorder,
-  ChatBubbleOutline
-} from '@mui/icons-material'
+import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
+import BuyButton from '~/components/Item/BuyButton'
+import Link from 'next/link'
 // interface PathParams {
 //   id: number
 // }
@@ -46,7 +45,13 @@ const ShopItemPrise = styled('div')(({ theme }) => ({
 }))
 
 const IsTaxSendfeeInclude = styled('div')(({ theme }) => ({
-  color: '#999'
+  color: '#999',
+}))
+
+const SellerName = styled('div')(({ theme }) => ({
+  color: '#000',
+  fontSize: '16',
+  fontWeight: 'bold',
 }))
 
 interface Params {
@@ -57,37 +62,64 @@ const ItemPage: NextPage<Params> = ({ item }) => {
   if (!item) return <h1>Error</h1>
   return (
     <>
-    <Box sx={{}}>
-      <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <NextImage src='/vercel.svg' alt='image' width={500} height={500} style={{margin: '3% 5%', backgroundColor: '#000'}}/>
-        <Box sx={{width: 700}}>
-          <ShopItemTitle>{item.title}</ShopItemTitle>
-          <Box sx={{display: 'flex'}}>
-            <ShopItemPrise>￥{item.prise}</ShopItemPrise>
-            <IsTaxSendfeeInclude>(税込)送料込み</IsTaxSendfeeInclude>
-          </Box>
-          <Box sx={{display: 'flex'}}>
-            <IconButton>
-              <FavoriteBorder></FavoriteBorder>
-            </IconButton>
-            いいね
-            <IconButton>
-              <ChatBubbleOutline></ChatBubbleOutline>
-            </IconButton>
-            コメント
-          </Box>
-          <Box>
-            <h4>商品詳細</h4>
-            <Box sx={{backgroundColor: '#909090', padding: '5%', borderRadius: '10px'}}>
-              商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。
+      <Box sx={{ margin: '5%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <NextImage
+            src='/vercel.svg'
+            alt='image'
+            width={500}
+            height={500}
+            style={{ margin: '0 5%', backgroundColor: '#000' }}
+          />
+          <Box sx={{ width: 500, marginTop: '100px' }}>
+            <ShopItemTitle>{item.title}</ShopItemTitle>
+            <Box sx={{ display: 'flex' }}>
+              <ShopItemPrise>￥{item.prise}</ShopItemPrise>
+              <IsTaxSendfeeInclude>(税込)送料込み</IsTaxSendfeeInclude>
             </Box>
+            <Box sx={{ display: 'flex' }}>
+              <IconButton>
+                <FavoriteBorder></FavoriteBorder>
+              </IconButton>
+              いいね
+              <IconButton>
+                <ChatBubbleOutline></ChatBubbleOutline>
+              </IconButton>
+              コメント
+            </Box>
+            <Box sx={{ margin: '10px 30px' }}>
+              <BuyButton />
+            </Box>
+            <Box>
+              <h4>商品詳細</h4>
+              <Box sx={{ backgroundColor: '#EAC7C7', padding: '5%', borderRadius: '10px' }}>
+                商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。
+              </Box>
+            </Box>
+            <Link href='/'>
+              <Box
+                sx={{
+                  display: 'flex',
+                  margin: '10px',
+                  padding: '20px',
+                  borderTop: 'solid #ECECEC',
+                  borderBottom: 'solid #ECECEC',
+                }}
+              >
+                <Box
+                  sx={{ backgroundColor: 'pink', borderRadius: '50%' }}
+                  width={50}
+                  height={50}
+                ></Box>
+                <Box>
+                  <SellerName>佐藤しお</SellerName>
+                  <Rating defaultValue={2.5} readOnly size='small' />
+                </Box>
+              </Box>
+            </Link>
           </Box>
-          
         </Box>
       </Box>
-    </Box>
-      
-      
     </>
   )
 }
