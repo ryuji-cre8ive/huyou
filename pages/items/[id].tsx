@@ -63,8 +63,14 @@ const ItemPage: NextPage<Params> = ({ item }) => {
   return (
     <>
       <Box sx={{ margin: '5%' }}>
-        <Box sx={{ display: {xs: 'block', sm: 'flex'}, justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{width: { xs: '300px', sm: '500px' }, height: { xs: '300px', sm: '500px' }, }}>
+        <Box
+          sx={{
+            display: { xs: 'block', sm: 'flex' },
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Box sx={{ width: { xs: '300px', sm: '500px' }, height: { xs: '300px', sm: '500px' } }}>
             <NextImage
               src='/vercel.svg'
               alt='image'
@@ -72,8 +78,8 @@ const ItemPage: NextPage<Params> = ({ item }) => {
               style={{ margin: '0 5%', backgroundColor: '#000' }}
             />
           </Box>
-          
-          <Box sx={{ width: { sx: '100%', sm: 500}, marginTop: { xs: '20px', sm: '100px'} }}>
+
+          <Box sx={{ width: { sx: '100%', sm: 500 }, marginTop: { xs: '20px', sm: '100px' } }}>
             <ShopItemTitle>{item.title}</ShopItemTitle>
             <Box sx={{ display: 'flex' }}>
               <ShopItemPrise>￥{item.prise}</ShopItemPrise>

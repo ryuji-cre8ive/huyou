@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
   })
   return (
     <ThemeProvider theme={theme}>
-      <Header islogin={false}/>
+      <Header islogin={false} />
       <Component {...pageProps} />
     </ThemeProvider>
   )
