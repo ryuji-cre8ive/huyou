@@ -18,7 +18,6 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main style={{}}>
-        <Header islogin={false} />
         <Container sx={{ textAlign: 'center' }}>
           <Contents />
         </Container>
