@@ -1,0 +1,13 @@
+query FetchUser {
+  users{
+    id
+    name
+  }
+}
+
+query ShopItems {
+  items{
+    id
+    title
+  }
+}
