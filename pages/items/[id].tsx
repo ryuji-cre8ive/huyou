@@ -3,7 +3,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { shopItemMock } from '../../tmpShopItem'
 import { ShopItemType } from 'interface/shop'
 import NextImage from 'next/image'
-import { Box, IconButton, Rating } from '@mui/material'
+import { Box, IconButton, Rating, Typography } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles'
 import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
 import BuyButton from '~/components/Item/BuyButton'
@@ -70,7 +70,14 @@ const ItemPage: NextPage<Params> = ({ item }) => {
             alignItems: 'center',
           }}
         >
-          <Box sx={{ width: { xs: '300px', sm: '500px' }, height: { xs: '300px', sm: '500px' } }}>
+          <Box
+            sx={{
+              width: { xs: '300px', sm: '500px' },
+              height: { xs: '300px', sm: '500px' },
+              margin: { xs: '0', sm: '5%' },
+              position: 'relative',
+            }}
+          >
             <NextImage
               src='/vercel.svg'
               alt='image'
@@ -99,11 +106,24 @@ const ItemPage: NextPage<Params> = ({ item }) => {
               <BuyButton />
             </Box>
             <Box>
-              <h4>商品詳細</h4>
+              <Typography
+                variant='h6'
+                component={'h3'}
+                sx={{ fontSize: '18px', fontWeight: 'bold', margin: '20px 0' }}
+              >
+                商品詳細
+              </Typography>
               <Box sx={{ backgroundColor: '#EAC7C7', padding: '5%', borderRadius: '10px' }}>
                 商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。
               </Box>
             </Box>
+            <Typography
+              variant='h6'
+              component={'h3'}
+              sx={{ fontSize: '18px', fontWeight: 'bold', margin: '20px 0' }}
+            >
+              出品者
+            </Typography>
             <Link href='/'>
               <Box
                 sx={{
@@ -119,7 +139,7 @@ const ItemPage: NextPage<Params> = ({ item }) => {
                   width={50}
                   height={50}
                 ></Box>
-                <Box>
+                <Box sx={{ marginLeft: '10px' }}>
                   <SellerName>佐藤しお</SellerName>
                   <Rating defaultValue={2.5} readOnly size='small' />
                 </Box>

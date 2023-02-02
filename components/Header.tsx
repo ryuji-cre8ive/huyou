@@ -10,6 +10,8 @@ import {
 } from '@mui/icons-material'
 import LoginButton from './LoginButton'
 import SearchBar from './SearchBar'
+import { useSession } from "next-auth/react"
+
 
 interface Props {
   islogin: boolean
@@ -38,6 +40,9 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
   const handleMobileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget)
   }
+
+  const { data: session } = useSession()
+  session ? islogin = true : islogin = false
 
   const menuId = 'primary-search-account-menu'
   const renderMenu = (
@@ -178,7 +183,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
               </Box>
             </>
           ) : (
-            <LoginButton />
+            <LoginButton/>
           )}
         </Toolbar>
       </AppBar>

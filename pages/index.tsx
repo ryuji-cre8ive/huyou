@@ -5,10 +5,32 @@ import styles from '../styles/Home.module.css'
 import Header from '~/components/Header'
 import Contents from '~/components/Contents'
 import { Container } from '@mui/material'
+import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { useShopItemsQuery } from '~/generated/graphql'
+import { ShopItemType } from 'interface/shop'
 
 const inter = Inter({ subsets: ['latin'] })
+import { client } from '../lib/graphql'
 
-export default function Home() {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!params) {
+    return {
+      props: { item: {} }
+    }
+  }
+  const items = useShopItemsQuery
+  return {
+    props: {items},
+    revalidate: 1, // このページに変更があった場合にビルドやるよ
+    notFound: !items,
+  }
+}
+
+interface Params {
+  items: ShopItemType[]
+}
+
+const Home: NextPage<Params> = ({items}) =>  {
   return (
     <>
       <Head>
@@ -19,9 +41,11 @@ export default function Home() {
       </Head>
       <main style={{}}>
         <Container sx={{ textAlign: 'center' }}>
-          <Contents />
+          <Contents shopItem={items}/>
         </Container>
       </main>
     </>
   )
 }
+
+export default Home
