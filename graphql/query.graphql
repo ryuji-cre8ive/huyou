@@ -14,11 +14,18 @@ query FetchUser {
   }
 }
 
-query ShopItems {
+query ShopItemsTop {
   items{
     id
     title
     prise
+    image
+  }
+}
+
+query ShopItemIDs {
+  items{
+    id
   }
 }
 
