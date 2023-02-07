@@ -7,7 +7,7 @@ interface Props {
   shopItem: ShopItemType[]
 }
 
-const Contents: React.FC<Props> = ({shopItem}) => {
+const Contents: React.FC<Props> = ({ shopItem }) => {
   return (
     <Grid container spacing={{ xs: 1, md: 5 }}>
       {shopItem.map((item: ShopItemType, i: number) => {
