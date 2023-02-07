@@ -9,16 +9,21 @@ import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
 import BuyButton from '~/components/Item/BuyButton'
 import Link from 'next/link'
 import { useQuery } from 'urql'
-import { ShopItemsDocument } from '~/generated/graphql'
+
 import { GraphQLClient } from 'graphql-request'
 import { getSdk } from '~/generated/server'
-// interface PathParams {
-//   id: number
-// }
+interface PathParams {
+  id: string
+}
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = shopItemMock.map((item: { id: string }) => ({
-    params: { id: item.id },
+  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const sdk = getSdk(server)
+  const data = await sdk.ShopItemIDs()
+  const paths = data.items.map((item: PathParams) => ({
+    params: {
+      id: item.id
+    }
   }))
   return {
     paths,
