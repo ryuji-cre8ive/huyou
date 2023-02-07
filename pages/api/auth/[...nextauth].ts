@@ -26,6 +26,7 @@ export const authOptions = {
     }),
     // ...add more providers here
   ],
+  secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, account }: any) {
       if (account) {
