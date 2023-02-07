@@ -1,0 +1,66 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type User {
+  id: ID!
+  name: String!
+  image: String
+  assessment: Int
+  ShopItem: [ShopItem!]
+}
+
+type ShopItem {
+  id: ID!
+  title: String!
+  description: String
+  image: String!
+  good: Int!
+  prise: Int!
+  userID: String!
+  user: User!
+  comments: [Comment]
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  userID: String!
+  shopItemID: ID!
+}
+
+type Query {
+  items: [ShopItem]
+  item(id: ID!): ShopItem
+  comments: [Comment]
+  users: [User]
+}
+
+input NewShopItem {
+  id: ID!
+  title: String!
+  description: String
+  image: String!
+  good: Int
+  prise: Int!
+}
+
+input NewUser {
+  id: ID!
+  name: String!
+  image: String
+  assessment: Int
+}
+
+input NewComment {
+  id: ID!
+  content: String!
+  userID: String!
+  shopItemID: ID!
+}
+
+type Mutation {
+  createShopItem(input: NewShopItem!): ShopItem!
+  createUser(input: NewUser!): User!
+  createComment(input: NewComment!):Comment!
+}

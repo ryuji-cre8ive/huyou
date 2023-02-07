@@ -1,13 +1,17 @@
 import React from 'react'
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { shopItemMock } from '../../tmpShopItem'
-import { ShopItemType } from 'interface/shop'
+import { ShopItem } from 'interface/shop'
 import NextImage from 'next/image'
 import { Box, IconButton, Rating, Typography } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles'
 import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
 import BuyButton from '~/components/Item/BuyButton'
 import Link from 'next/link'
+import { useQuery } from 'urql'
+import { ShopItemsDocument } from '~/generated/graphql'
+import { GraphQLClient } from 'graphql-request'
+import { getSdk } from '~/generated/server'
 // interface PathParams {
 //   id: number
 // }
@@ -23,15 +27,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (!params)
+  if (!params || !params.id)
     return {
       props: { item: {} },
     }
-  const item = shopItemMock[Number(params.id) - 1]
+  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const sdk = getSdk(server)
+  const data = await sdk.FindItem({
+    id: String(params.id),
+  })
+  console.log('item', data.item)
   return {
-    props: { item },
+    props: { item: data.item },
     revalidate: 1, // このページに変更があった場合にビルドやるよ
-    notFound: !item,
+    notFound: !data,
   }
 }
 
@@ -55,7 +64,7 @@ const SellerName = styled('div')(({ theme }) => ({
 }))
 
 interface Params {
-  item: ShopItemType
+  item: ShopItem
 }
 
 const ItemPage: NextPage<Params> = ({ item }) => {
@@ -114,7 +123,7 @@ const ItemPage: NextPage<Params> = ({ item }) => {
                 商品詳細
               </Typography>
               <Box sx={{ backgroundColor: '#EAC7C7', padding: '5%', borderRadius: '10px' }}>
-                商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。商品詳細が入ります。
+                {item.description ? item.description : '説明文がありません'}
               </Box>
             </Box>
             <Typography
@@ -140,8 +149,8 @@ const ItemPage: NextPage<Params> = ({ item }) => {
                   height={50}
                 ></Box>
                 <Box sx={{ marginLeft: '10px' }}>
-                  <SellerName>佐藤しお</SellerName>
-                  <Rating defaultValue={2.5} readOnly size='small' />
+                  <SellerName>{item.user.name}</SellerName>
+                  <Rating defaultValue={item.user.assessment} readOnly size='small' />
                 </Box>
               </Box>
             </Link>
