@@ -1,3 +1,12 @@
+fragment ItemFragment on ShopItem {
+  id
+  title
+  description
+  image
+  good
+  prise
+}
+
 query FetchUser {
   users{
     id
@@ -9,5 +18,20 @@ query ShopItems {
   items{
     id
     title
+    prise
+  }
+}
+
+query FindItem($id: ID!){
+  item(id: $id) {
+    ...ItemFragment
+    user{
+      name
+      assessment
+    }
+    comments{
+      content
+      userID
+    }
   }
 }

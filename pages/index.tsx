@@ -6,31 +6,43 @@ import Header from '~/components/Header'
 import Contents from '~/components/Contents'
 import { Container } from '@mui/material'
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import { useShopItemsQuery } from '~/generated/graphql'
-import { ShopItemType } from 'interface/shop'
+import { ShopItemsDocument } from '~/generated/graphql'
+import { ShopItem } from 'interface/shop'
 
 const inter = Inter({ subsets: ['latin'] })
 import { client } from '../lib/graphql'
+import { useQuery } from 'urql'
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (!params) {
-    return {
-      props: { item: {} }
-    }
-  }
-  const items = useShopItemsQuery
-  return {
-    props: {items},
-    revalidate: 1, // このページに変更があった場合にビルドやるよ
-    notFound: !items,
-  }
-}
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   if (!params) {
+//     return {
+//       props: { item: {} }
+//     }
+//   }
+
+// return {
+//   props: {items},
+//   revalidate: 1, // このページに変更があった場合にビルドやるよ
+//   notFound: !items,
+// }
+// }
 
 interface Params {
-  items: ShopItemType[]
+  items: ShopItem[]
 }
 
-const Home: NextPage<Params> = ({items}) =>  {
+const Home: NextPage<Params> = ({ items }) => {
+  const [result, reexecuteQuery] = useQuery({
+    query: ShopItemsDocument,
+  })
+  const { data, fetching, error } = result
+  if (fetching) {
+    return <p>fetching ...</p>
+  }
+  if (error) {
+    return <p>error</p>
+  }
+  console.log('data', result)
   return (
     <>
       <Head>
@@ -41,7 +53,7 @@ const Home: NextPage<Params> = ({items}) =>  {
       </Head>
       <main style={{}}>
         <Container sx={{ textAlign: 'center' }}>
-          <Contents shopItem={items}/>
+          <Contents shopItem={data.items} />
         </Container>
       </main>
     </>
