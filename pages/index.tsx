@@ -6,26 +6,32 @@ import Header from '~/components/Header'
 import Contents from '~/components/Contents'
 import { Container } from '@mui/material'
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import { ShopItemsDocument } from '~/generated/graphql'
+// import { ShopItemsDocument } from '~/generated/graphql'
 import { ShopItem } from 'interface/shop'
-
+import { GraphQLClient } from 'graphql-request'
+import { getSdk } from '~/generated/server'
+import { ShopItemsTopDocument } from '~/generated/graphql'
 const inter = Inter({ subsets: ['latin'] })
 import { client } from '../lib/graphql'
 import { useQuery } from 'urql'
 
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   if (!params) {
-//     return {
-//       props: { item: {} }
-//     }
-//   }
-
-// return {
-//   props: {items},
-//   revalidate: 1, // このページに変更があった場合にビルドやるよ
-//   notFound: !items,
-// }
-// }
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!params || !params.id)
+    return {
+      props: { item: {} },
+    }
+  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const sdk = getSdk(server)
+  const data = await sdk.FindItem({
+    id: String(params.id),
+  })
+  console.log('item', data.item)
+  return {
+    props: { item: data.item },
+    revalidate: 1, // このページに変更があった場合にビルドやるよ
+    notFound: !data,
+  }
+}
 
 interface Params {
   items: ShopItem[]
@@ -33,7 +39,7 @@ interface Params {
 
 const Home: NextPage<Params> = ({ items }) => {
   const [result, reexecuteQuery] = useQuery({
-    query: ShopItemsDocument,
+    query: ShopItemsTopDocument,
   })
   const { data, fetching, error } = result
   if (fetching) {

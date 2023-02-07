@@ -3,9 +3,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Box } from '@mui/material'
 
-import { ShopItemType } from '../interface/shop'
+interface Props {
+  id: string
+  title: string
+  image: string
+  prise: number
+}
 
-const ShopItem: React.FC<ShopItemType> = ({ id, title, imageURL, prise }) => {
+const ShopItem: React.FC<Props> = ({ id, title, image, prise }) => {
   return (
     <>
       <Link href={`/items/${id}`}>
