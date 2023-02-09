@@ -34,6 +34,7 @@ type Query {
   item(id: ID!): ShopItem!
   comments: [Comment]!
   users: [User!]!
+  user(id: ID!): User
 }
 
 input NewShopItem {

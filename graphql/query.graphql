@@ -14,6 +14,12 @@ query FetchUser {
   }
 }
 
+query UserIDs {
+  users{
+    id
+  }
+}
+
 query ShopItemsTop {
   items{
     id
@@ -33,12 +39,27 @@ query FindItem($id: ID!){
   item(id: $id) {
     ...ItemFragment
     user{
+      id
       name
       assessment
     }
     comments{
       content
       userID
+    }
+  }
+}
+
+query FindUser($id: ID!){
+  user(id: $id){
+    name
+    image
+    assessment
+    ShopItem{
+      id
+      title
+      image
+      prise
     }
   }
 }

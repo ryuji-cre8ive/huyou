@@ -138,7 +138,7 @@ const ItemPage: NextPage<Params> = ({ item }) => {
             >
               出品者
             </Typography>
-            <Link href='/'>
+            <Link href={`/users/${item.user.id}`}>
               <Box
                 sx={{
                   display: 'flex',
