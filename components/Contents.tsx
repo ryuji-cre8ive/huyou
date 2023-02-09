@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from '@mui/material'
 import ShopItem from '~/components/ShopItem'
 
-import { ShopItem as ShopItemType} from '../interface/shop'
+import { ShopItem as ShopItemType } from '../interface/shop'
 interface Props {
   shopItem: ShopItemType[]
 }

@@ -22,8 +22,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const data = await sdk.ShopItemIDs()
   const paths = data.items.map((item: PathParams) => ({
     params: {
-      id: item.id
-    }
+      id: item.id,
+    },
   }))
   return {
     paths,

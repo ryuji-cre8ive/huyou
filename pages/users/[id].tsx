@@ -4,12 +4,12 @@ import { getDataWithQuery } from 'lib/graphql'
 import { GraphQLClient } from 'graphql-request'
 import { getSdk, UserIDsQuery, FindUserQuery } from '~/generated/server'
 import { User } from '~/generated/graphql'
-export const getStaticPaths: GetStaticPaths = async() => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await getDataWithQuery('UserIDs')
   const paths = data.users.map((user) => ({
     params: {
-      id: user.id
-    }
+      id: user.id,
+    },
   }))
   return {
     paths,
@@ -35,7 +35,7 @@ interface Params {
   user: User
 }
 
-export const UserPage: NextPage<Params> = ({user}) => {
+export const UserPage: NextPage<Params> = ({ user }) => {
   return (
     <>
       <h1>this is {user.name} user page</h1>
