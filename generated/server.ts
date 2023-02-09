@@ -73,11 +73,17 @@ export type Query = {
   comments: Array<Maybe<Comment>>;
   item: ShopItem;
   items: Array<ShopItem>;
+  user?: Maybe<User>;
   users: Array<User>;
 };
 
 
 export type QueryItemArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
@@ -110,6 +116,11 @@ export type FetchUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchUserQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string }> };
 
+export type UserIDsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserIDsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string }> };
+
 export type ShopItemsTopQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -125,7 +136,14 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number, user: { __typename?: 'User', name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number, user: { __typename?: 'User', id: string, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+
+export type FindUserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type FindUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name: string, image?: string | null, assessment?: number | null, ShopItem?: Array<{ __typename?: 'ShopItem', id: string, title: string, image: string, prise: number }> | null } | null };
 
 export const ItemFragmentFragmentDoc = gql`
     fragment ItemFragment on ShopItem {
@@ -142,6 +160,13 @@ export const FetchUserDocument = gql`
   users {
     id
     name
+  }
+}
+    `;
+export const UserIDsDocument = gql`
+    query UserIDs {
+  users {
+    id
   }
 }
     `;
@@ -167,6 +192,7 @@ export const FindItemDocument = gql`
   item(id: $id) {
     ...ItemFragment
     user {
+      id
       name
       assessment
     }
@@ -177,6 +203,21 @@ export const FindItemDocument = gql`
   }
 }
     ${ItemFragmentFragmentDoc}`;
+export const FindUserDocument = gql`
+    query FindUser($id: ID!) {
+  user(id: $id) {
+    name
+    image
+    assessment
+    ShopItem {
+      id
+      title
+      image
+      prise
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -188,6 +229,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     FetchUser(variables?: FetchUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FetchUserQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FetchUserQuery>(FetchUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'FetchUser', 'query');
     },
+    UserIDs(variables?: UserIDsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserIDsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserIDsQuery>(UserIDsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UserIDs', 'query');
+    },
     ShopItemsTop(variables?: ShopItemsTopQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ShopItemsTopQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ShopItemsTopQuery>(ShopItemsTopDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ShopItemsTop', 'query');
     },
@@ -196,6 +240,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     FindItem(variables: FindItemQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindItemQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FindItemQuery>(FindItemDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'FindItem', 'query');
+    },
+    FindUser(variables: FindUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindUserQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindUserQuery>(FindUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'FindUser', 'query');
     }
   };
 }

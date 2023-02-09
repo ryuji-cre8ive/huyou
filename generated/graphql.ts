@@ -73,11 +73,17 @@ export type Query = {
   comments: Array<Maybe<Comment>>;
   item: ShopItem;
   items: Array<ShopItem>;
+  user?: Maybe<User>;
   users: Array<User>;
 };
 
 
 export type QueryItemArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
@@ -110,6 +116,11 @@ export type FetchUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchUserQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string }> };
 
+export type UserIDsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserIDsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string }> };
+
 export type ShopItemsTopQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -125,7 +136,14 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number, user: { __typename?: 'User', name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number, user: { __typename?: 'User', id: string, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+
+export type FindUserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type FindUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name: string, image?: string | null, assessment?: number | null, ShopItem?: Array<{ __typename?: 'ShopItem', id: string, title: string, image: string, prise: number }> | null } | null };
 
 export const ItemFragmentFragmentDoc = gql`
     fragment ItemFragment on ShopItem {
@@ -148,6 +166,17 @@ export const FetchUserDocument = gql`
 
 export function useFetchUserQuery(options?: Omit<Urql.UseQueryArgs<FetchUserQueryVariables>, 'query'>) {
   return Urql.useQuery<FetchUserQuery, FetchUserQueryVariables>({ query: FetchUserDocument, ...options });
+};
+export const UserIDsDocument = gql`
+    query UserIDs {
+  users {
+    id
+  }
+}
+    `;
+
+export function useUserIDsQuery(options?: Omit<Urql.UseQueryArgs<UserIDsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserIDsQuery, UserIDsQueryVariables>({ query: UserIDsDocument, ...options });
 };
 export const ShopItemsTopDocument = gql`
     query ShopItemsTop {
@@ -179,6 +208,7 @@ export const FindItemDocument = gql`
   item(id: $id) {
     ...ItemFragment
     user {
+      id
       name
       assessment
     }
@@ -192,4 +222,23 @@ export const FindItemDocument = gql`
 
 export function useFindItemQuery(options: Omit<Urql.UseQueryArgs<FindItemQueryVariables>, 'query'>) {
   return Urql.useQuery<FindItemQuery, FindItemQueryVariables>({ query: FindItemDocument, ...options });
+};
+export const FindUserDocument = gql`
+    query FindUser($id: ID!) {
+  user(id: $id) {
+    name
+    image
+    assessment
+    ShopItem {
+      id
+      title
+      image
+      prise
+    }
+  }
+}
+    `;
+
+export function useFindUserQuery(options: Omit<Urql.UseQueryArgs<FindUserQueryVariables>, 'query'>) {
+  return Urql.useQuery<FindUserQuery, FindUserQueryVariables>({ query: FindUserDocument, ...options });
 };
