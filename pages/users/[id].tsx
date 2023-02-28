@@ -41,16 +41,16 @@ interface Params {
 export const UserPage: NextPage<Params> = ({ user }) => {
   return (
     <>
-      <Box sx={{display: 'flex'}}>
-        <Box sx={{position: 'relative', width: { xs: '50px', sm: '100px' },
-              height: { xs: '50px', sm: '100px' },}}>
+      <Box sx={{display: 'flex', justifyContent: 'center', margin: '50px'}}>
+        <Box sx={{position: 'relative', width: { xs: '30px', sm: '80px' },
+              height: { xs: '30px', sm: '80px' },}}>
           <NextImage src={user.image ? user.image : '/vercel.svg'} alt='user image' fill style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}/>
         </Box>
-        <Box sx={{margin: '0 20px'}}>
+        <Box sx={{margin: '10px 20px'}}>
           <p style={{margin: '0'}}>{user.name}</p>
           <Rating readOnly value={user.assessment} size='small'></Rating>
         </Box>
-        <Button variant='outlined' color='error' size='small'>フォロー</Button>
+        <Button variant='outlined' color='error' size='small' sx={{margin: '20px 0'}}>フォロー</Button>
       </Box>
     </>
   )
