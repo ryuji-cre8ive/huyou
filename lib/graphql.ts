@@ -3,12 +3,12 @@ import { GraphQLClient } from 'graphql-request'
 import { getSdk } from '~/generated/server'
 
 export const client = createClient({
-  url: process.env.GO_GRAPHQL_BASE_URL || 'http://localhost:8080/query',
+  url: String(process.env.Server),
 })
 
 export const getDataWithQuery = async <T>(query: String, arg?: T, limit?: Number): Promise<any> => {
   let data
-  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const server = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(server)
   if (query == 'FetchUser') {
     data = await sdk.FetchUser()

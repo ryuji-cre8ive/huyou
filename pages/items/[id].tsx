@@ -17,7 +17,7 @@ interface PathParams {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const server = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(server)
   const data = await sdk.ShopItemIDs()
   const paths = data.items.map((item: PathParams) => ({
@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: { item: {} },
     }
-  const server = new GraphQLClient(process.env.GO_GRAPH_SERVER || 'http://localhost:8080/query')
+  const server = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(server)
   const data = await sdk.FindItem({
     id: String(params.id),
