@@ -6,8 +6,11 @@ export const client = createClient({
   url: String(process.env.Server),
 })
 
-export const getDataWithQuery = async <T>(query: String, arg?: T, limit?: Number): Promise<any> => {
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const getDataWithQuery = async <T>(query: String, arg?: T): Promise<any> => {
   let data
+  const limit = 10
   const server = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(server)
   if (query == 'FetchUser') {
@@ -26,5 +29,10 @@ export const getDataWithQuery = async <T>(query: String, arg?: T, limit?: Number
     data = await sdk.FetchUser()
     alert('you are wrong args...')
   }
+  const delay = limit ? Math.ceil(1000 / limit) : 0;
+  if (delay) {
+    await sleep(delay);
+  }
+
   return data
 }
