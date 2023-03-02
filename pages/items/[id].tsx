@@ -9,6 +9,7 @@ import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
 import BuyButton from '~/components/Item/BuyButton'
 import Link from 'next/link'
 import { useQuery } from 'urql'
+import { executeQuery } from 'lib/graphql'
 
 import { GraphQLClient } from 'graphql-request'
 import { getSdk } from '~/generated/server'
@@ -17,9 +18,7 @@ interface PathParams {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const server = new GraphQLClient(String(process.env.Server))
-  const sdk = getSdk(server)
-  const data = await sdk.ShopItemIDs()
+  const data = await executeQuery('ShopItemIDs')
   const paths = data.items.map((item: PathParams) => ({
     params: {
       id: item.id,
@@ -36,11 +35,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: { item: {} },
     }
-  const server = new GraphQLClient(String(process.env.Server))
-  const sdk = getSdk(server)
-  const data = await sdk.FindItem({
-    id: String(params.id),
-  })
+    const data = await executeQuery("FindItem", {
+      id: String(params.id),
+    })
   console.log('item', data.item)
   return {
     props: { item: data.item },

@@ -6,33 +6,21 @@ export const client = createClient({
   url: String(process.env.Server),
 })
 
+type QueryType = "FetchUser" | "FindItem" | "ShopItemIDs" | "ShopItemsTop" | "UserIDs" | "FindUser";
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const getDataWithQuery = async <T>(query: String, arg?: T): Promise<any> => {
-  let data
-  const limit = 10
-  const server = new GraphQLClient(String(process.env.Server))
-  const sdk = getSdk(server)
-  if (query == 'FetchUser') {
-    data = await sdk.FetchUser()
-  } else if (query == 'FindItem') {
-    data = await sdk.FindItem({ id: String(arg) })
-  } else if (query == 'ShopItemIDs') {
-    data = await sdk.ShopItemIDs()
-  } else if (query == 'ShopItemTop') {
-    data = await sdk.ShopItemsTop()
-  } else if (query == 'UserIDs') {
-    data = await sdk.UserIDs()
-  } else if (query == 'FindUser') {
-    data = await sdk.FindUser({ id: String(arg) })
-  } else {
-    data = await sdk.FetchUser()
-    alert('you are wrong args...')
+export const executeQuery = async (query: QueryType, variables: any = {}, delay = 10): Promise<any> => {
+
+  const client = new GraphQLClient(String(process.env.Server))
+  const sdk = getSdk(client)
+  const data = await sdk[query](variables)
+  console.log("dddddddd", data)
+  if (!data) {
+    return alert("error")
   }
-  const delay = limit ? Math.ceil(1000 / limit) : 0;
   if (delay) {
     await sleep(delay);
   }
-
   return data
 }

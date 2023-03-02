@@ -1,14 +1,15 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
-import { getDataWithQuery } from 'lib/graphql'
-import { GraphQLClient } from 'graphql-request'
-import { getSdk, UserIDsQuery, FindUserQuery } from '~/generated/server'
+import { executeQuery } from 'lib/graphql'
+import { UserIDsQuery, FindUserQuery } from '~/generated/server'
 import type { User } from '~/generated/graphql'
 import { Box, Rating, Button, Container, Typography } from '@mui/material'
 import NextImage from 'next/image'
 import Contents from '~/components/Item/Contents'
+
+
 export const getStaticPaths: GetStaticPaths = async () => {
-  const data: UserIDsQuery = await getDataWithQuery('UserIDs')
+  const data: UserIDsQuery = await executeQuery("UserIDs")
   const paths = data.users.map((user) => ({
     params: {
       id: user.id,
@@ -25,7 +26,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: { user: {} },
     }
-  const data: FindUserQuery = await getDataWithQuery('FindUser', params.id)
+  const data: FindUserQuery = await executeQuery("FindUser", {id: String(params.id)})
   console.log('user', data.user)
   return {
     props: { user: data.user },
