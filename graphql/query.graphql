@@ -63,3 +63,20 @@ query FindUser($id: ID!){
     }
   }
 }
+
+query FindUserWithMail($mail: String!, $password: String!) {
+  userWithMail(mail: $mail, password: $password) {
+    password
+    mail
+    name
+    image
+  }
+}
+
+mutation CreateUser($mail: String!, $password: String!) {
+  createUser(mail: $mail, password: $password) {
+    id
+    mail
+    password
+  }
+}
