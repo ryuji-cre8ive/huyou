@@ -58,7 +58,6 @@ const Home: NextPage<Params> = ({ items }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main style={{}}>
-        <h1>this is {process.env.NODE_ENV}</h1>
         <Container sx={{ textAlign: 'center' }}>
           <Contents shopItem={data.items} />
         </Container>
