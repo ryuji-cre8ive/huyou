@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { executeQuery } from 'lib/graphql'
+import { FindUserWithMailQuery } from '~/generated/server'
+import { ConstructionOutlined } from '@mui/icons-material'
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -8,16 +11,16 @@ export const authOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'username', type: 'text', placeholder: 'UserName' },
+        mail: { label: 'mail', type: 'text', placeholder: 'メールアドレス' },
         password: { label: 'password', type: 'password' },
       },
-      async authorize(credentials, req) {
-        const user = { id: '1', name: 'J Smith', email: 'jsmith@example.com' }
-        if (user) {
-          return user
-        } else {
-          return null
+      async authorize(credentials, req): Promise<any> {
+        const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {mail: String(credentials?.mail), password: String(credentials?.password)})
+        if (data.userWithMail) {
+          return data.userWithMail
         }
+
+        return null
       },
     }),
     GithubProvider({
