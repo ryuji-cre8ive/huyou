@@ -11,12 +11,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
   const paths = data.users.map((user) => ({
     params: {
-      id: user.id,
+      id: String(user.id),
     },
   }))
   return {
     paths,
-    fallback: true, // can also be true or 'blocking'
+    fallback: 'blocking', // can also be true or 'blocking'
   }
 }
 
