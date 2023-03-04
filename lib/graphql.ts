@@ -22,7 +22,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 export const executeQuery = async (
   query: QueryType | MutationType,
   variables: any = {},
-  delay = 10,
+  delay = 100,
 ): Promise<any> => {
   const client = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(client)
