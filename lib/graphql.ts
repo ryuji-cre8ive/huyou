@@ -1,24 +1,32 @@
 import { createClient } from 'urql'
 import { GraphQLClient } from 'graphql-request'
-import { getSdk } from '~/generated/server'
+import { getSdk, MutationCreateUserArgs } from '~/generated/server'
 
 export const client = createClient({
   url: String(process.env.Server),
 })
 
-type QueryType = 'FetchUser' | 'FindItem' | 'ShopItemIDs' | 'ShopItemsTop' | 'UserIDs' | 'FindUser'
+type QueryType =
+  | 'FetchUser'
+  | 'FindItem'
+  | 'ShopItemIDs'
+  | 'ShopItemsTop'
+  | 'UserIDs'
+  | 'FindUser'
+  | 'FindUserWithMail'
+
+type MutationType = 'CreateUser'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const executeQuery = async (
-  query: QueryType,
+  query: QueryType | MutationType,
   variables: any = {},
   delay = 10,
 ): Promise<any> => {
   const client = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(client)
   const data = await sdk[query](variables)
-  console.log('dddddddd', data)
   if (!data) {
     return alert('error')
   }
