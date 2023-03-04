@@ -8,11 +8,9 @@ import { styled, alpha } from '@mui/material/styles'
 import { FavoriteBorder, ChatBubbleOutline } from '@mui/icons-material'
 import BuyButton from '~/components/Item/BuyButton'
 import Link from 'next/link'
-import { useQuery } from 'urql'
+
 import { executeQuery } from 'lib/graphql'
 
-import { GraphQLClient } from 'graphql-request'
-import { getSdk } from '~/generated/server'
 interface PathParams {
   id: string
 }
@@ -35,9 +33,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: { item: {} },
     }
-    const data = await executeQuery("FindItem", {
-      id: String(params.id),
-    })
+  const data = await executeQuery('FindItem', {
+    id: String(params.id),
+  })
   console.log('item', data.item)
   return {
     props: { item: data.item },
