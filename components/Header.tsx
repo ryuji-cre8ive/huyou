@@ -9,6 +9,8 @@ import {
   More as MoreIcon,
 } from '@mui/icons-material'
 import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
+import RegisterUserButton from './SignupButton'
 import SearchBar from './SearchBar'
 import { useSession } from 'next-auth/react'
 
@@ -180,9 +182,15 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
                   <MoreIcon />
                 </IconButton>
               </Box>
+              <Box sx={{ marginLeft: '30px' }}>
+                <LogoutButton />
+              </Box>
             </>
           ) : (
-            <LoginButton />
+            <>
+              <RegisterUserButton />
+              <LoginButton />
+            </>
           )}
         </Toolbar>
       </AppBar>
