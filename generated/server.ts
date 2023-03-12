@@ -37,7 +37,12 @@ export type MutationCreateCommentArgs = {
 
 
 export type MutationCreateShopItemArgs = {
-  input: NewShopItem;
+  description?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  isContainDelivery: Scalars['Boolean'];
+  price: Scalars['Int'];
+  title: Scalars['String'];
+  userID: Scalars['String'];
 };
 
 
@@ -51,15 +56,6 @@ export type NewComment = {
   id: Scalars['ID'];
   shopItemID: Scalars['ID'];
   userID: Scalars['String'];
-};
-
-export type NewShopItem = {
-  description?: InputMaybe<Scalars['String']>;
-  good?: InputMaybe<Scalars['Int']>;
-  id: Scalars['ID'];
-  image: Scalars['String'];
-  prise: Scalars['Int'];
-  title: Scalars['String'];
 };
 
 export type NewUser = {
@@ -102,7 +98,8 @@ export type ShopItem = {
   good: Scalars['Int'];
   id: Scalars['ID'];
   image: Scalars['String'];
-  prise: Scalars['Int'];
+  isContainDelivery: Scalars['Boolean'];
+  price: Scalars['Int'];
   title: Scalars['String'];
   user: User;
   userID: Scalars['String'];
@@ -119,7 +116,7 @@ export type User = {
   password: Scalars['String'];
 };
 
-export type ItemFragmentFragment = { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number };
+export type ItemFragmentFragment = { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, price: number };
 
 export type FetchUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -134,7 +131,7 @@ export type UserIDsQuery = { __typename?: 'Query', users: Array<{ __typename?: '
 export type ShopItemsTopQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ShopItemsTopQuery = { __typename?: 'Query', items: Array<{ __typename?: 'ShopItem', id: string, title: string, prise: number, image: string }> };
+export type ShopItemsTopQuery = { __typename?: 'Query', items: Array<{ __typename?: 'ShopItem', id: string, title: string, price: number, image: string }> };
 
 export type ShopItemIDsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -146,14 +143,14 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, prise: number, user: { __typename?: 'User', id?: string | null, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, price: number, user: { __typename?: 'User', id?: string | null, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
 
 export type FindUserQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type FindUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name: string, image?: string | null, assessment?: number | null, ShopItem?: Array<{ __typename?: 'ShopItem', id: string, title: string, image: string, prise: number }> | null } | null };
+export type FindUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name: string, image?: string | null, assessment?: number | null, ShopItem?: Array<{ __typename?: 'ShopItem', id: string, title: string, image: string, price: number }> | null } | null };
 
 export type FindUserWithMailQueryVariables = Exact<{
   mail: Scalars['String'];
@@ -161,7 +158,7 @@ export type FindUserWithMailQueryVariables = Exact<{
 }>;
 
 
-export type FindUserWithMailQuery = { __typename?: 'Query', userWithMail?: { __typename?: 'User', password: string, mail: string, name: string, image?: string | null } | null };
+export type FindUserWithMailQuery = { __typename?: 'Query', userWithMail?: { __typename?: 'User', password: string, mail: string, name: string, image?: string | null, id?: string | null } | null };
 
 export type CreateUserMutationVariables = Exact<{
   mail: Scalars['String'];
@@ -171,6 +168,18 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id?: string | null, mail: string, password: string } };
 
+export type CreateShopItemMutationVariables = Exact<{
+  title: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  price: Scalars['Int'];
+  isContainDelivery: Scalars['Boolean'];
+  userID: Scalars['String'];
+}>;
+
+
+export type CreateShopItemMutation = { __typename?: 'Mutation', createShopItem: { __typename?: 'ShopItem', title: string, description?: string | null, price: number, image: string, userID: string } };
+
 export const ItemFragmentFragmentDoc = gql`
     fragment ItemFragment on ShopItem {
   id
@@ -178,7 +187,7 @@ export const ItemFragmentFragmentDoc = gql`
   description
   image
   good
-  prise
+  price
 }
     `;
 export const FetchUserDocument = gql`
@@ -201,7 +210,7 @@ export const ShopItemsTopDocument = gql`
   items {
     id
     title
-    prise
+    price
     image
   }
 }
@@ -239,7 +248,7 @@ export const FindUserDocument = gql`
       id
       title
       image
-      prise
+      price
     }
   }
 }
@@ -251,6 +260,7 @@ export const FindUserWithMailDocument = gql`
     mail
     name
     image
+    id
   }
 }
     `;
@@ -260,6 +270,24 @@ export const CreateUserDocument = gql`
     id
     mail
     password
+  }
+}
+    `;
+export const CreateShopItemDocument = gql`
+    mutation CreateShopItem($title: String!, $description: String, $image: String, $price: Int!, $isContainDelivery: Boolean!, $userID: String!) {
+  createShopItem(
+    title: $title
+    description: $description
+    image: $image
+    price: $price
+    isContainDelivery: $isContainDelivery
+    userID: $userID
+  ) {
+    title
+    description
+    price
+    image
+    userID
   }
 }
     `;
@@ -294,6 +322,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateUser(variables: CreateUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateUserMutation>(CreateUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateUser', 'mutation');
+    },
+    CreateShopItem(variables: CreateShopItemMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateShopItemMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateShopItemMutation>(CreateShopItemDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateShopItem', 'mutation');
     }
   };
 }

@@ -15,7 +15,7 @@ type QueryType =
   | 'FindUser'
   | 'FindUserWithMail'
 
-type MutationType = 'CreateUser'
+type MutationType = 'CreateUser' | 'CreateShopItem'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
