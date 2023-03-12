@@ -16,11 +16,11 @@ export const authOptions = {
       },
       async authorize(credentials, req): Promise<any> {
         const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {mail: String(credentials?.mail), password: String(credentials?.password)})
-        if (data.userWithMail) {
-          return data.userWithMail
+        if (!data.userWithMail) {
+          return null
         }
-
-        return null
+        console.log("userWithMail",data.userWithMail)
+        return data.userWithMail
       },
     }),
     GithubProvider({
@@ -31,14 +31,16 @@ export const authOptions = {
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async jwt({ token, account }: any) {
+    async jwt({ token, account, user }: any) {
       if (account) {
+        token.userID = user.id
         token.accessToken = account.access_token
       }
       return token
     },
-    async session({ session, token, user }: any) {
+    async session({ session, token }: any) {
       session.accessToken = token.accessToken
+      session.user.id = token.userID
       return session
     },
   },
