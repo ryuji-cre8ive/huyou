@@ -2,7 +2,7 @@ export interface ShopItem {
   id: string
   title: string
   image: string
-  prise: number
+  price: number
   description: string
   userID: string
   user: User

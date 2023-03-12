@@ -7,10 +7,10 @@ interface Props {
   id: string
   title: string
   image: string
-  prise: number
+  price: number
 }
 
-const ShopItem: React.FC<Props> = ({ id, title, image, prise }) => {
+const ShopItem: React.FC<Props> = ({ id, title, image, price }) => {
   return (
     <>
       <Link href={`/items/${id}`}>
@@ -35,7 +35,7 @@ const ShopItem: React.FC<Props> = ({ id, title, image, prise }) => {
               borderRadius: 30,
             }}
           >
-            ￥{prise}
+            ￥{price}
           </Box>
         </Box>
         <Box>{title}</Box>

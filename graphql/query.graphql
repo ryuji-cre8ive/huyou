@@ -4,7 +4,7 @@ fragment ItemFragment on ShopItem {
   description
   image
   good
-  prise
+  price
 }
 
 query FetchUser {
@@ -24,7 +24,7 @@ query ShopItemsTop {
   items{
     id
     title
-    prise
+    price
     image
   }
 }
@@ -59,7 +59,7 @@ query FindUser($id: ID!){
       id
       title
       image
-      prise
+      price
     }
   }
 }
@@ -70,6 +70,7 @@ query FindUserWithMail($mail: String!, $password: String!) {
     mail
     name
     image
+    id
   }
 }
 
@@ -78,5 +79,15 @@ mutation CreateUser($mail: String!, $password: String!) {
     id
     mail
     password
+  }
+}
+
+mutation CreateShopItem($title: String!, $description: String, $image: String, $price: Int!, $isContainDelivery: Boolean!, $userID: String!) {
+  createShopItem(title: $title, description: $description, image: $image, price: $price, isContainDelivery: $isContainDelivery, userID: $userID) {
+    title
+    description
+    price
+    image
+    userID
   }
 }

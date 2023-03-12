@@ -16,7 +16,7 @@ const Contents: React.FC<Props> = ({ shopItem }) => {
       {shopItem.map((item: ShopItemType, i: number) => {
         return (
           <Grid key={i} item xs={6} sm={4} md={2.3}>
-            <ShopItem id={item.id} title={item.title} image={item.image} prise={item.prise} />
+            <ShopItem id={item.id} title={item.title} image={item.image} price={item.price} />
           </Grid>
         )
       })}
