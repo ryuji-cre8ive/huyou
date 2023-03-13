@@ -3,7 +3,7 @@
 # https://gqlgen.com/getting-started/
 
 type User {
-  id: ID
+  id: ID!
   name: String!
   mail: String!
   password: String!
@@ -38,7 +38,7 @@ type Query {
   comments: [Comment]!
   users: [User!]!
   user(id: ID!): User
-  userWithMail(mail: String, password: String): User
+  userWithMail(mail: String!, password: String!): User
 }
 
 input NewUser {
@@ -56,7 +56,7 @@ input NewComment {
 }
 
 type Mutation {
-  createShopItem(title: String!, description: String, image: String, price: Int!, isContainDelivery: Boolean!, userID: String!): ShopItem!
+  createShopItem(title: String!, description: String, image: String, price: Int!, isContainDelivery: Boolean!, userID: String!): ShopItem
   createUser(mail: String!, password: String!): User!
   createComment(input: NewComment!):Comment!
 }

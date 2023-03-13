@@ -15,11 +15,14 @@ export const authOptions = {
         password: { label: 'password', type: 'password' },
       },
       async authorize(credentials, req): Promise<any> {
-        const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {mail: String(credentials?.mail), password: String(credentials?.password)})
+        const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {
+          mail: String(credentials?.mail),
+          password: String(credentials?.password),
+        })
         if (!data.userWithMail) {
           return null
         }
-        console.log("userWithMail",data.userWithMail)
+        console.log('userWithMail', data.userWithMail)
         return data.userWithMail
       },
     }),

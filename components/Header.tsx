@@ -144,12 +144,12 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
             </>
           ) : (
             <>
-            <Box sx={{marginRight: '10px'}}>
-              <RegisterUserButton />
-            </Box>
-            <Box>
-              <LoginButton />
-            </Box>
+              <Box sx={{ marginRight: '10px' }}>
+                <RegisterUserButton />
+              </Box>
+              <Box>
+                <LoginButton />
+              </Box>
             </>
           )}
         </Toolbar>

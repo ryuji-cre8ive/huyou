@@ -26,7 +26,7 @@ export type Comment = {
 export type Mutation = {
   __typename?: 'Mutation';
   createComment: Comment;
-  createShopItem: ShopItem;
+  createShopItem?: Maybe<ShopItem>;
   createUser: User;
 };
 
@@ -87,8 +87,8 @@ export type QueryUserArgs = {
 
 
 export type QueryUserWithMailArgs = {
-  mail?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
+  mail: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type ShopItem = {
@@ -109,7 +109,7 @@ export type User = {
   __typename?: 'User';
   ShopItem?: Maybe<Array<ShopItem>>;
   assessment?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
   mail: Scalars['String'];
   name: Scalars['String'];
@@ -121,12 +121,12 @@ export type ItemFragmentFragment = { __typename?: 'ShopItem', id: string, title:
 export type FetchUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchUserQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null, name: string }> };
+export type FetchUserQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string }> };
 
 export type UserIDsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserIDsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id?: string | null }> };
+export type UserIDsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string }> };
 
 export type ShopItemsTopQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -143,7 +143,7 @@ export type FindItemQueryVariables = Exact<{
 }>;
 
 
-export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, price: number, user: { __typename?: 'User', id?: string | null, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
+export type FindItemQuery = { __typename?: 'Query', item: { __typename?: 'ShopItem', id: string, title: string, description?: string | null, image: string, good: number, price: number, user: { __typename?: 'User', id: string, name: string, assessment?: number | null }, comments?: Array<{ __typename?: 'Comment', content: string, userID: string } | null> | null } };
 
 export type FindUserQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -158,7 +158,7 @@ export type FindUserWithMailQueryVariables = Exact<{
 }>;
 
 
-export type FindUserWithMailQuery = { __typename?: 'Query', userWithMail?: { __typename?: 'User', password: string, mail: string, name: string, image?: string | null, id?: string | null } | null };
+export type FindUserWithMailQuery = { __typename?: 'Query', userWithMail?: { __typename?: 'User', password: string, mail: string, name: string, image?: string | null, id: string } | null };
 
 export type CreateUserMutationVariables = Exact<{
   mail: Scalars['String'];
@@ -166,7 +166,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id?: string | null, mail: string, password: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, mail: string, password: string } };
 
 export type CreateShopItemMutationVariables = Exact<{
   title: Scalars['String'];
@@ -178,7 +178,7 @@ export type CreateShopItemMutationVariables = Exact<{
 }>;
 
 
-export type CreateShopItemMutation = { __typename?: 'Mutation', createShopItem: { __typename?: 'ShopItem', title: string, description?: string | null, price: number, image: string, userID: string } };
+export type CreateShopItemMutation = { __typename?: 'Mutation', createShopItem?: { __typename?: 'ShopItem', title: string, description?: string | null, price: number, image: string, user: { __typename?: 'User', id: string, name: string } } | null };
 
 export const ItemFragmentFragmentDoc = gql`
     fragment ItemFragment on ShopItem {
@@ -287,7 +287,10 @@ export const CreateShopItemDocument = gql`
     description
     price
     image
-    userID
+    user {
+      id
+      name
+    }
   }
 }
     `;

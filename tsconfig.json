@@ -19,12 +19,7 @@
       "~/components/*": ["components/*"],
       "~/generated/*": ["generated/*"]
     },
-    "types": [
-      "node",
-      "react",
-      "next",
-      "@types/next-auth"
-    ]
+    "types": ["node", "react", "next", "./types/next-auth"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

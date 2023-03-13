@@ -49,7 +49,7 @@ const ShopItemTitle = styled('div')(({ theme }) => ({
   fontWeight: 'bold',
 }))
 
-const ShopItemprice = styled('div')(({ theme }) => ({
+const ShopItemPrice = styled('div')(({ theme }) => ({
   fontSize: 26,
 }))
 
@@ -98,7 +98,7 @@ const ItemPage: NextPage<Params> = ({ item }) => {
           <Box sx={{ width: { sx: '100%', sm: 500 }, marginTop: { xs: '20px', sm: '100px' } }}>
             <ShopItemTitle>{item.title}</ShopItemTitle>
             <Box sx={{ display: 'flex' }}>
-              <ShopItemprice>￥{item.price}</ShopItemprice>
+              <ShopItemPrice>￥{item.price}</ShopItemPrice>
               <IsTaxSendfeeInclude>(税込)送料込み</IsTaxSendfeeInclude>
             </Box>
             <Box sx={{ display: 'flex' }}>

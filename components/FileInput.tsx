@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material'
 
 const FileInput = ({ onChange, selectedFile }: any) => {
   console.log(selectedFile?.name)
@@ -24,7 +24,7 @@ const FileInput = ({ onChange, selectedFile }: any) => {
         value={selectedFile?.name ?? ''}
       />
     </>
-  );
-};
+  )
+}
 
 export default FileInput

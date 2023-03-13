@@ -88,6 +88,9 @@ mutation CreateShopItem($title: String!, $description: String, $image: String, $
     description
     price
     image
-    userID
+    user{
+      id
+      name
+    }
   }
 }
