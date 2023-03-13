@@ -16,7 +16,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }))
   return {
     paths,
-    timeout: 1000000,
     fallback: true, // can also be true or 'blocking'
   }
 }
