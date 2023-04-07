@@ -14,6 +14,7 @@ import RegisterUserButton from './SignupButton'
 import SearchBar from './SearchBar'
 import { useSession } from 'next-auth/react'
 import AddContentButton from './AddContetnButton'
+import AccountButton from './account/AccountButton'
 
 interface Props {
   islogin: boolean
@@ -41,6 +42,10 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
 
   const handleMobileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget)
+  }
+
+  const handleAccountButtonClick = (): boolean => {
+    return true
   }
 
   const { data: session } = useSession()
@@ -138,9 +143,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
           {islogin ? (
             <>
               <AddContentButton />
-              <Box sx={{ marginLeft: '30px' }}>
-                <LogoutButton />
-              </Box>
+              <AccountButton onAccountButtonClick={handleAccountButtonClick}/>
             </>
           ) : (
             <>
