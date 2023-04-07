@@ -22,7 +22,6 @@ export const authOptions = {
         if (!data.userWithMail) {
           return null
         }
-        console.log('userWithMail', data.userWithMail)
         return data.userWithMail
       },
     }),
@@ -46,6 +45,14 @@ export const authOptions = {
       session.user.id = token.userID
       return session
     },
+    async signIn({ user, account, profile, email, credentials }: any) {
+      console.log('user', user)
+      if (account.provider === 'credentials' && user.name == '') {
+        console.log('new user', user.isNewUser)
+        return `/users/account/${user.id}`
+      }
+    },
   },
 }
+
 export default NextAuth(authOptions)
