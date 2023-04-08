@@ -1,6 +1,6 @@
 import { createClient } from 'urql'
 import { GraphQLClient } from 'graphql-request'
-import { getSdk, MutationCreateUserArgs } from '~/generated/server'
+import { getSdk } from '~/generated/server'
 
 export const client = createClient({
   url: String(process.env.Server),
@@ -15,7 +15,7 @@ type QueryType =
   | 'FindUser'
   | 'FindUserWithMail'
 
-type MutationType = 'CreateUser' | 'CreateShopItem'
+type MutationType = 'CreateUser' | 'CreateShopItem' | 'AppendNameForCreatedUser'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -27,6 +27,7 @@ export const executeQuery = async (
   const client = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(client)
   const data = await sdk[query](variables)
+  console.log('data in execute', data)
   if (!data) {
     return alert('error')
   }
