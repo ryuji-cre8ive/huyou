@@ -55,6 +55,7 @@ query FindUser($id: ID!){
     name
     image
     assessment
+    id
     ShopItem{
       id
       title
