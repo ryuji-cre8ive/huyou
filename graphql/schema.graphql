@@ -58,5 +58,6 @@ input NewComment {
 type Mutation {
   createShopItem(title: String!, description: String, image: String, price: Int!, isContainDelivery: Boolean!, userID: String!): ShopItem
   createUser(mail: String!, password: String!): User!
+  appendNameForCreatedUser(image: String!, name: String!, userID: String!): User!
   createComment(input: NewComment!):Comment!
 }

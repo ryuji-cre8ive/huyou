@@ -33,6 +33,14 @@ export const authOptions = {
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }: any) {
+      console.log('user', user)
+      if (account.provider === 'credentials' && user.name == '') {
+        console.log('new user', user.isNewUser)
+        return { redirect: { destination: `/users/account/${user.id}` }, session: { user: user } }
+      }
+      return true
+    },
     async jwt({ token, account, user }: any) {
       if (account) {
         token.userID = user.id
@@ -44,13 +52,6 @@ export const authOptions = {
       session.accessToken = token.accessToken
       session.user.id = token.userID
       return session
-    },
-    async signIn({ user, account, profile, email, credentials }: any) {
-      console.log('user', user)
-      if (account.provider === 'credentials' && user.name == '') {
-        console.log('new user', user.isNewUser)
-        return `/users/account/${user.id}`
-      }
     },
   },
 }

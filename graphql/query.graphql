@@ -94,3 +94,9 @@ mutation CreateShopItem($title: String!, $description: String, $image: String, $
     }
   }
 }
+
+ mutation AppendNameForCreatedUser($image: String!, $name: String!, $userID: String!) {
+    appendNameForCreatedUser(image: $image, name: $name, userID: $userID) {
+      id
+    }
+  }
