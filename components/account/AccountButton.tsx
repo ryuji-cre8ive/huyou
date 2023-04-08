@@ -1,45 +1,45 @@
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import React from 'react';
+import MenuItem from '@mui/material/MenuItem'
+import Menu from '@mui/material/Menu'
+import { IconButton } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import SearchIcon from '@mui/icons-material/Search'
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import React from 'react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import router from 'next/router'
-import Link from 'next/link';
+import Link from 'next/link'
 
 interface Props {
   onAccountButtonClick: () => boolean
 }
 
 const AccountButton = ({ onAccountButtonClick }: Props) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMenuOpen = Boolean(anchorEl)
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (onAccountButtonClick()) {
-      setAnchorEl(event.currentTarget);
+      setAnchorEl(event.currentTarget)
     }
-  };
+  }
 
   const { data: session } = useSession()
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+    setMobileMoreAnchorEl(null)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
+    setAnchorEl(null)
+    handleMobileMenuClose()
+  }
 
   const handleProfileMenu = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+    setAnchorEl(null)
+    handleMobileMenuClose()
   }
 
   const handleLogout = () => {
@@ -48,7 +48,7 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
     handleMobileMenuClose()
   }
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-account-menu'
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -66,19 +66,18 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleProfileMenu}>
-        <Link href={'/users/' + session?.user.id}>
-        プロフィール
-        </Link>
-        
-        </MenuItem>
+        <Link href={'/users/' + session?.user.id}>プロフィール</Link>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Link href={'/users/account/' + session?.user.id}>アカウント</Link>
       </MenuItem>
-      <MenuItem sx={{color: 'red'}} onClick={handleLogout}>ログアウト</MenuItem>
+      <MenuItem sx={{ color: 'red' }} onClick={handleLogout}>
+        ログアウト
+      </MenuItem>
     </Menu>
-  );
+  )
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = 'primary-search-account-menu-mobile'
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -97,37 +96,36 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
     >
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
           <AccountCircle />
         </IconButton>
         <p>プロフィール</p>
       </MenuItem>
     </Menu>
-  );
+  )
 
   return (
     <>
       <IconButton
-        size="large"
-        edge="end"
-        aria-label="account of current user"
+        size='large'
+        edge='end'
+        aria-label='account of current user'
         aria-controls={menuId}
-        aria-haspopup="true"
+        aria-haspopup='true'
         onClick={handleProfileMenuOpen}
-        color="inherit"
+        color='inherit'
       >
         <AccountCircle />
       </IconButton>
       {renderMenu}
       {renderMobileMenu}
     </>
-  );
-};
-
+  )
+}
 
 export default AccountButton

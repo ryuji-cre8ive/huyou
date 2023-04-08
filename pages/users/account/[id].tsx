@@ -5,13 +5,11 @@ import { UserIDsQuery, FindUserQuery, AppendNameForCreatedUserMutation } from '~
 import type { User } from '~/generated/graphql'
 import { Box, Rating, Button, Container, Typography, Grid, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useState, ChangeEvent, FormEvent} from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import Image from 'next/image'
 import { encodeImageToBase64URL } from 'lib/image'
 import { useSession } from 'next-auth/react'
 import router from 'next/router'
-
-
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -25,8 +23,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true, // can also be true or 'blocking'
   }
 }
-
-
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id)
@@ -49,46 +45,49 @@ interface Params {
 export const UserAccountPage: NextPage<Params> = ({ user }) => {
   const { data: session } = useSession()
 
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<String | null>(null);
+  const [file, setFile] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<String | null>(null)
   const [name, setName] = useState<String | null>(null)
   const [loading, setLoading] = useState<boolean | undefined>(false)
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files && event.target.files[0];
+    const selectedFile = event.target.files && event.target.files[0]
     if (!selectedFile) return
     setFile(selectedFile)
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = () => {
-      setPreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(selectedFile);
-  };
+      setPreviewUrl(reader.result as string)
+    }
+    reader.readAsDataURL(selectedFile)
+  }
 
   const handleSubmit = async (file: File) => {
     setLoading(true)
-    console.log("submitting...")
-    console.log("user: ", session?.user)
-    try{
+    console.log('submitting...')
+    console.log('user: ', session?.user)
+    try {
       const base64Image = await encodeImageToBase64URL(file)
       const params = {
         image: base64Image,
         name: name,
-        userID: session?.user.id
+        userID: session?.user.id,
       }
-      console.log("postdata: ", params)
-      const data: AppendNameForCreatedUserMutation = await executeQuery('AppendNameForCreatedUser', params)
-      console.log("responsed data: ", data)
+      console.log('postdata: ', params)
+      const data: AppendNameForCreatedUserMutation = await executeQuery(
+        'AppendNameForCreatedUser',
+        params,
+      )
+      console.log('responsed data: ', data)
       router.push('/users/account/' + data.appendNameForCreatedUser.id)
       setLoading(false)
-    }catch(e) {
+    } catch (e) {
       setLoading(false)
       alert('予期せぬエラーが発生しました。\n' + e)
       console.log(e)
     }
   }
 
-  const handleSubmitName = (event: FormEvent<EventTarget & {value: String}>) => {
+  const handleSubmitName = (event: FormEvent<EventTarget & { value: String }>) => {
     const newName = event.currentTarget.value
     setName(newName)
   }
@@ -97,54 +96,84 @@ export const UserAccountPage: NextPage<Params> = ({ user }) => {
   if (session?.user.id !== user.id) {
     return (
       <>
-        <Box sx={{textAlign: 'center', margin: '20px'}}>
+        <Box sx={{ textAlign: 'center', margin: '20px' }}>
           <Typography variant='h5'>あなたのアカウントではありません</Typography>
         </Box>
       </>
     )
   }
-  if (user.name === '') return(
-    <>
-    <Box sx={{textAlign: 'center', margin: '20px'}}>
-      <Typography variant='h5'>初期登録をしてください</Typography>
-      <form onSubmit={(event) => {
-        event.preventDefault()
-        if (file) {
-          handleSubmit(file)
-        } else {
-          alert("ファイルが選択されていません")
-        }
-      }}>
-      <Grid container spacing={2} alignItems="center" justifyContent='center' sx={{textAlign: 'center'}}>
-        <Grid item xs={12} sm={12} sx={{ textAlign: 'center' }}>
-          {previewUrl && (
-            <Box sx={{borderRadius: '100%', overflow: 'hidden', display: 'flex', width: '8%', height: '8%', alignItems: 'center', justifyContent: 'center', margin: '0 auto', border: '1px solid black'}}>
-              <Image src={String(previewUrl)} alt="Preview" width='1000' height='1000' layout='responsive'/>
-            </Box>
-          )}
-        </Grid>
-        <Grid item xs={12} sm={12} >
-          <TextField
-            type="file"
-            onChange={handleFileChange}
-            inputProps={{ accept: "image/*" }}
-            required
-          />
-        </Grid>
-      </Grid>
-      <TextField id="standard-basic" label="Name" variant="standard" onChange={handleSubmitName} required sx={{marginTop: '10px', width: '20%'}} />
-      <LoadingButton loading={loading} variant="outlined" type='submit'>
-        Submit
-      </LoadingButton>
-    </form>
-    </Box>
-    </>
-  )
-  return (
-    <>
-      this is user account page for {user.name}
-    </>
-  )
+  if (user.name === '')
+    return (
+      <>
+        <Box sx={{ textAlign: 'center', margin: '20px' }}>
+          <Typography variant='h5'>初期登録をしてください</Typography>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (file) {
+                handleSubmit(file)
+              } else {
+                alert('ファイルが選択されていません')
+              }
+            }}
+          >
+            <Grid
+              container
+              spacing={2}
+              alignItems='center'
+              justifyContent='center'
+              sx={{ textAlign: 'center' }}
+            >
+              <Grid item xs={12} sm={12} sx={{ textAlign: 'center' }}>
+                {previewUrl && (
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      width: '8%',
+                      height: '8%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto',
+                      border: '1px solid black',
+                    }}
+                  >
+                    <Image
+                      src={String(previewUrl)}
+                      alt='Preview'
+                      width='1000'
+                      height='1000'
+                      layout='responsive'
+                    />
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type='file'
+                  onChange={handleFileChange}
+                  inputProps={{ accept: 'image/*' }}
+                  required
+                />
+              </Grid>
+            </Grid>
+            <TextField
+              id='standard-basic'
+              label='Name'
+              variant='standard'
+              onChange={handleSubmitName}
+              required
+              sx={{ marginTop: '10px', width: '20%' }}
+            />
+            <LoadingButton loading={loading} variant='outlined' type='submit'>
+              Submit
+            </LoadingButton>
+          </form>
+        </Box>
+      </>
+    )
+  return <>this is user account page for {user.name}</>
 }
 
 export default UserAccountPage

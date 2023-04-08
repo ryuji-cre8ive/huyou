@@ -11,10 +11,10 @@ export const encodeImageToBase64URL = (file: any): Promise<string> => {
 }
 
 export const decodeBase64URLToImage = (base64URL: string) => {
-  const binaryString = window.atob(base64URL);
-  const bytes = new Uint8Array(binaryString.length);
+  const binaryString = window.atob(base64URL)
+  const bytes = new Uint8Array(binaryString.length)
   for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
+    bytes[i] = binaryString.charCodeAt(i)
   }
-  return bytes;
+  return bytes
 }

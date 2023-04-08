@@ -143,7 +143,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
           {islogin ? (
             <>
               <AddContentButton />
-              <AccountButton onAccountButtonClick={handleAccountButtonClick}/>
+              <AccountButton onAccountButtonClick={handleAccountButtonClick} />
             </>
           ) : (
             <>
