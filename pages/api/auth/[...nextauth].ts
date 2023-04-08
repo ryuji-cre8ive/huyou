@@ -1,11 +1,11 @@
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { executeQuery } from 'lib/graphql'
 import { FindUserWithMailQuery } from '~/generated/server'
 import { ConstructionOutlined } from '@mui/icons-material'
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -33,11 +33,11 @@ export const authOptions = {
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }: any) {
+    async signIn({ user, account, profile, email, credentials }: any): Promise<any> {
       console.log('user', user)
       if (account.provider === 'credentials' && user.name == '') {
-        console.log('new user', user.isNewUser)
-        return { redirect: { destination: `/users/account/${user.id}` }, session: { user: user } }
+        console.log('new user', user)
+        return { redirect: { destination: `/users/account/${user.id}` }, session: { user } }
       }
       return true
     },
