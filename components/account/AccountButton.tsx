@@ -7,6 +7,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react'
 import router from 'next/router'
+import Link from 'next/link';
 
 interface Props {
   onAccountButtonClick: () => boolean
@@ -37,14 +38,9 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
   };
 
   const handleProfileMenu = () => {
-    router.push('/users/[id]', `/users/${session?.user?.id}'`)
     setAnchorEl(null);
     handleMobileMenuClose();
   }
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const handleLogout = () => {
     signOut()
@@ -69,8 +65,15 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleProfileMenu}>プロフィール</MenuItem>
-      <MenuItem onClick={handleMenuClose}>アカウント</MenuItem>
+      <MenuItem onClick={handleProfileMenu}>
+        <Link href={'/users/' + session?.user.id}>
+        プロフィール
+        </Link>
+        
+        </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link href={'/users/account/' + session?.user.id}>アカウント</Link>
+      </MenuItem>
       <MenuItem sx={{color: 'red'}} onClick={handleLogout}>ログアウト</MenuItem>
     </Menu>
   );
