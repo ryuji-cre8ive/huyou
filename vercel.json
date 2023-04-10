@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "AWS_LAMBDA_FUNCTION_TIMEOUT": "30"
+    }
+  }
+}
