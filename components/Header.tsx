@@ -1,15 +1,10 @@
 import React, { useState, MouseEvent } from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, MenuItem, Menu } from '@mui/material'
-import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  AccountCircle,
-  Mail as MailIcon,
-  Notifications as NotificationsIcon,
-  More as MoreIcon,
-} from '@mui/icons-material'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import MailIcon from '@mui/icons-material/Mail'
+import NotificationsIcon from '@mui/icons-material/Notifications'
+
 import LoginButton from './LoginButton'
-import LogoutButton from './LogoutButton'
 import RegisterUserButton from './SignupButton'
 import SearchBar from './SearchBar'
 import { useSession } from 'next-auth/react'
@@ -114,7 +109,7 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
           aria-haspopup='true'
           color='inherit'
         >
-          <AccountCircle />
+          <AccountCircleIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>

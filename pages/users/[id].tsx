@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }))
   return {
     paths,
-    fallback: true, // can also be true or 'blocking'
+    fallback: process.env.NODE_ENV === 'production' ?? 'blocking' // can also be true or 'blocking'
   }
 }
 

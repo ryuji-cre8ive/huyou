@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent } from 'react'
 import { styled, alpha } from '@mui/material/styles'
 import { InputBase } from '@mui/material'
-import { Search as SearchIcon } from '@mui/icons-material'
+import SearchIcon from '@mui/icons-material/Search'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',

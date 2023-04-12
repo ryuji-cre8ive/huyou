@@ -13,7 +13,7 @@ interface Props {
 const ShopItem: React.FC<Props> = ({ id, title, image, price }) => {
   return (
     <>
-      <Link href={`/items/${id}`}>
+      <Link href={`/items/[id]`} as={`/items/${id}`}>
         <Box
           sx={{
             position: 'relative',
