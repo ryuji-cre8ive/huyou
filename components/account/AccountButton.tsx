@@ -1,6 +1,6 @@
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
-import { IconButton } from '@mui/material'
+import { Avatar, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import AccountCircle from '@mui/icons-material/AccountCircle'
@@ -69,7 +69,7 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
         <Link href={'/users/' + session?.user.id}>プロフィール</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Link href={'/users/account/' + session?.user.id}>アカウント</Link>
+        <Link href={'/users/account/' + session?.user.id}>マイページ</Link>
       </MenuItem>
       <MenuItem sx={{ color: 'red' }} onClick={handleLogout}>
         ログアウト
@@ -120,7 +120,7 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
         onClick={handleProfileMenuOpen}
         color='inherit'
       >
-        <AccountCircle />
+        <Avatar src={session?.user.image} />
       </IconButton>
       {renderMenu}
       {renderMobileMenu}

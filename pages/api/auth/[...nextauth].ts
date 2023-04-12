@@ -3,7 +3,7 @@ import GithubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { executeQuery } from 'lib/graphql'
 import { FindUserWithMailQuery } from '~/generated/server'
-import { ConstructionOutlined } from '@mui/icons-material'
+import getBaseURL from 'lib/baseURL'
 
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
@@ -33,24 +33,40 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }: any): Promise<any> {
-      console.log('user', user)
+    async signIn({ user, account, profile, email, credentials, session }: any): Promise<any> {
       if (account.provider === 'credentials' && user.name == '') {
-        console.log('new user', user)
         return { redirect: { destination: `/users/account/${user.id}` }, session: { user } }
       }
       return true
     },
     async jwt({ token, account, user }: any) {
+      if (user) {
+        try {
+          const baseURL = getBaseURL()
+          const res = await fetch(baseURL + `/api/getProfImage?file=${user.image}`)
+          const JSONRes = await res.json()
+
+          user.image = JSONRes.url
+          token.image = user.image
+        } catch (error) {
+          console.error('Error fetching user image:', error)
+        }
+      }
+
       if (account) {
         token.userID = user.id
+        token.image = user.image
         token.accessToken = account.access_token
       }
       return token
     },
     async session({ session, token }: any) {
       session.accessToken = token.accessToken
-      session.user.id = token.userID
+      session.user = {
+        ...session.user,
+        id: token.userID,
+        image: token.image,
+      }
       return session
     },
   },
