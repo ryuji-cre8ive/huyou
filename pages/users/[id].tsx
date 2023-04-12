@@ -1,5 +1,5 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { executeQuery } from 'lib/graphql'
 import { UserIDsQuery, FindUserQuery } from '~/generated/server'
 import type { User } from '~/generated/graphql'
@@ -39,6 +39,17 @@ interface Params {
 }
 
 export const UserPage: NextPage<Params> = ({ user }) => {
+  const [image, setImage] = React.useState<string | null>(null)
+  useEffect(() => {
+    if (user) {
+      fetchData(String(user.image))
+    }
+  }, [user])
+  const fetchData = async (fileName: string) => {
+    const res = await fetch(`/api/getProfImage?file=${fileName}`)
+    const JSONRes = await res.json()
+    setImage(JSONRes.url)
+  }
   if (!user) return <p>error</p>
   return (
     <>
@@ -50,9 +61,9 @@ export const UserPage: NextPage<Params> = ({ user }) => {
             height: { xs: '30px', sm: '80px' },
           }}
         >
-          {user.image ? (
+          {image ? (
             <NextImage
-              src={String(user.image)}
+              src={String(image)}
               alt='user image'
               fill
               style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}
