@@ -6,6 +6,7 @@ import type { User } from '~/generated/graphql'
 import { Box, Rating, Button, Container, Typography } from '@mui/material'
 import NextImage from 'next/image'
 import Contents from '~/components/Item/Contents'
+import { useSession } from 'next-auth/react'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -39,17 +40,7 @@ interface Params {
 }
 
 export const UserPage: NextPage<Params> = ({ user }) => {
-  const [image, setImage] = React.useState<string | null>(null)
-  useEffect(() => {
-    if (user) {
-      fetchData(String(user.image))
-    }
-  }, [user])
-  const fetchData = async (fileName: string) => {
-    const res = await fetch(`/api/getProfImage?file=${fileName}`)
-    const JSONRes = await res.json()
-    setImage(JSONRes.url)
-  }
+  const {data: session} = useSession()
   if (!user) return <p>error</p>
   return (
     <>
@@ -61,9 +52,9 @@ export const UserPage: NextPage<Params> = ({ user }) => {
             height: { xs: '30px', sm: '80px' },
           }}
         >
-          {image ? (
+          {session?.user.image ? (
             <NextImage
-              src={String(image)}
+              src={String(session.user.image)}
               alt='user image'
               fill
               style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}
