@@ -8,23 +8,23 @@ import { ConstructionOutlined } from '@mui/icons-material'
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
-    // CredentialsProvider({
-    //   name: 'Credentials',
-    //   credentials: {
-    //     mail: { label: 'mail', type: 'text', placeholder: 'メールアドレス' },
-    //     password: { label: 'password', type: 'password' },
-    //   },
-    //   async authorize(credentials, req): Promise<any> {
-    //     const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {
-    //       mail: String(credentials?.mail),
-    //       password: String(credentials?.password),
-    //     })
-    //     if (!data.userWithMail) {
-    //       return null
-    //     }
-    //     return data.userWithMail
-    //   },
-    // }),
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        mail: { label: 'mail', type: 'text', placeholder: 'メールアドレス' },
+        password: { label: 'password', type: 'password' },
+      },
+      async authorize(credentials, req): Promise<any> {
+        const data: FindUserWithMailQuery = await executeQuery('FindUserWithMail', {
+          mail: String(credentials?.mail),
+          password: String(credentials?.password),
+        })
+        if (!data.userWithMail) {
+          return null
+        }
+        return data.userWithMail
+      },
+    }),
     GithubProvider({
       clientId: process.env.GITHUB_ID || '',
       clientSecret: process.env.GITHUB_SECRET || '',

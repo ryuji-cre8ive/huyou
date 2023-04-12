@@ -7,9 +7,10 @@ import { Box, Rating, Button, Container, Typography, Grid, TextField } from '@mu
 import { LoadingButton } from '@mui/lab'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import Image from 'next/image'
-import { encodeImageToBase64URL } from 'lib/image'
+import { encodeImageToBase64URL, uploadImg } from 'lib/image'
 import { useSession } from 'next-auth/react'
 import router from 'next/router'
+
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -66,9 +67,12 @@ export const UserAccountPage: NextPage<Params> = ({ user }) => {
     console.log('submitting...')
     console.log('user: ', session?.user)
     try {
-      const base64Image = await encodeImageToBase64URL(file)
+      const imageIDinGcs = await uploadImg(file)
+      if (!imageIDinGcs) return alert('画像のアップロードに失敗しました。')
+      console.log('gcsURL: ', imageIDinGcs)
+      
       const params = {
-        image: base64Image,
+        image: imageIDinGcs,
         name: name,
         userID: session?.user.id,
       }
@@ -173,7 +177,77 @@ export const UserAccountPage: NextPage<Params> = ({ user }) => {
         </Box>
       </>
     )
-  return <>this is user account page for {user.name}</>
-}
+  return (
+    <> 
+      this is user account page for {user.name}
 
+      <Box sx={{ textAlign: 'center', margin: '20px' }}>
+      <Typography variant='h5'>初期登録をしてください</Typography>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (file) {
+                handleSubmit(file)
+              } else {
+                alert('ファイルが選択されていません')
+              }
+            }}
+          >
+            <Grid
+              container
+              spacing={2}
+              alignItems='center'
+              justifyContent='center'
+              sx={{ textAlign: 'center' }}
+            >
+              <Grid item xs={12} sm={12} sx={{ textAlign: 'center' }}>
+                {previewUrl && (
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      width: '8%',
+                      height: '8%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto',
+                      border: '1px solid black',
+                    }}
+                  >
+                    <Image
+                      src={String(previewUrl)}
+                      alt='Preview'
+                      width='1000'
+                      height='1000'
+                      layout='responsive'
+                    />
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  type='file'
+                  onChange={handleFileChange}
+                  inputProps={{ accept: 'image/*' }}
+                  required
+                />
+              </Grid>
+            </Grid>
+            <TextField
+              id='standard-basic'
+              label='Name'
+              variant='standard'
+              onChange={handleSubmitName}
+              required
+              sx={{ marginTop: '10px', width: '20%' }}
+            />
+            <LoadingButton loading={loading} variant='outlined' type='submit'>
+              Submit
+            </LoadingButton>
+          </form>
+      </Box>
+    </>
+  ) 
+}
 export default UserAccountPage
