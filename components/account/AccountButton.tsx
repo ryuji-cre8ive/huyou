@@ -16,17 +16,20 @@ interface Props {
 const AccountButton = ({ onAccountButtonClick }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null)
-
+  const [profImage, setProfImage] = React.useState<string>('')
+  const { data: session } = useSession()
+  React.useEffect(() => {
+    setProfImage(String(session?.user.image))
+  }, [session?.user.image])
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
+
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (onAccountButtonClick()) {
       setAnchorEl(event.currentTarget)
     }
   }
-
-  const { data: session } = useSession()
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null)
@@ -120,7 +123,7 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
         onClick={handleProfileMenuOpen}
         color='inherit'
       >
-        <Avatar src={session?.user.image} />
+        <Avatar src={profImage} />
       </IconButton>
       {renderMenu}
       {renderMobileMenu}
