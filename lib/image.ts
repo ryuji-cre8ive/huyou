@@ -39,3 +39,9 @@ export const uploadImg = async (file: File) => {
   }
   return fileName
 }
+
+export const getImageFromGcs = async (fileName: string) => {
+  const res = await fetch(`/api/getProfImage?file=${fileName}`)
+  const { url } = await res.json()
+  return url
+}
