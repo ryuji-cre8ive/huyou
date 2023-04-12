@@ -1,5 +1,5 @@
-import {v4 as uuidv4} from 'uuid'
-import { Storage } from "@google-cloud/storage"
+import { v4 as uuidv4 } from 'uuid'
+import { Storage } from '@google-cloud/storage'
 import { useCallback } from 'react'
 
 export const encodeImageToBase64URL = (file: any): Promise<string> => {
@@ -23,19 +23,18 @@ export const decodeBase64URLToImage = (base64URL: string) => {
   return bytes
 }
 
-export const uploadImg = async (file:File) => {
+export const uploadImg = async (file: File) => {
   const fileName = uuidv4()
   const res = await fetch(`/api/uploadProfImage?file=${fileName}`)
-  const { url, fields } = await res.json();
-  const body = new FormData();
+  const { url, fields } = await res.json()
+  const body = new FormData()
   Object.entries({ ...fields, file }).forEach(([key, value]) => {
-    body.append(key, value as string | Blob );
-  });
-  const upload = await fetch(url, {method:"POST", body})
-  console.log(upload)
+    body.append(key, value as string | Blob)
+  })
+  const upload = await fetch(url, { method: 'POST', body })
 
   if (!upload.ok) {
-    console.log('upload failed')
+    console.error('upload failed')
     return ''
   }
   return fileName

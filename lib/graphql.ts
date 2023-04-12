@@ -27,7 +27,6 @@ export const executeQuery = async (
   const client = new GraphQLClient(String(process.env.Server))
   const sdk = getSdk(client)
   const data = await sdk[query](variables)
-  console.log('data in execute', data)
   if (!data) {
     return alert('error')
   }

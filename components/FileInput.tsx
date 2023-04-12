@@ -1,7 +1,6 @@
 import { Button, TextField } from '@mui/material'
 
 const FileInput = ({ onChange, selectedFile }: any) => {
-  console.log(selectedFile?.name)
   return (
     <>
       <input

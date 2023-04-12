@@ -36,7 +36,7 @@ export function graphql(source: string): unknown
  */
 export function graphql(
   source: 'query FetchUser {\n  users {\n    id\n    name\n  }\n}\n\nquery ShopItems {\n  items {\n    id\n    title\n  }\n}',
-): typeof documents['query FetchUser {\n  users {\n    id\n    name\n  }\n}\n\nquery ShopItems {\n  items {\n    id\n    title\n  }\n}']
+): (typeof documents)['query FetchUser {\n  users {\n    id\n    name\n  }\n}\n\nquery ShopItems {\n  items {\n    id\n    title\n  }\n}']
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {}

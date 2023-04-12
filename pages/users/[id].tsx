@@ -1,5 +1,5 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { executeQuery } from 'lib/graphql'
 import { UserIDsQuery, FindUserQuery } from '~/generated/server'
 import type { User } from '~/generated/graphql'

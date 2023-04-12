@@ -36,7 +36,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const data = await executeQuery('FindItem', {
     id: String(params.id),
   })
-  console.log('item', data.item)
   return {
     props: { item: data.item },
     revalidate: 1, // このページに変更があった場合にビルドやるよ
