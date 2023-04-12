@@ -21,7 +21,7 @@ export default async function handler(req: any, res: any) {
   const options = {
     version: 'v4' as const,
     action: 'read' as const,
-    expires: Date.now() + 5 * 60 * 1000, // 5分間有効
+    expires: Date.now() + 7 * 60 * 60 * 1000, // 1週間有効
   }
 
   const [url] = await file.getSignedUrl(options)
