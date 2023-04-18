@@ -14,8 +14,10 @@ type QueryType =
   | 'UserIDs'
   | 'FindUser'
   | 'FindUserWithMail'
+  | 'Following'
+  | 'Followers'
 
-type MutationType = 'CreateUser' | 'CreateShopItem' | 'AppendNameForCreatedUser'
+type MutationType = 'CreateUser' | 'CreateShopItem' | 'AppendNameForCreatedUser' | 'Follow' | 'UnFollow'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
