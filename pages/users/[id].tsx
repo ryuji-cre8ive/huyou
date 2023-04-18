@@ -1,5 +1,5 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { executeQuery } from 'lib/graphql'
 import { UserIDsQuery, FindUserQuery } from '~/generated/server'
 import type { User } from '~/generated/graphql'
@@ -7,6 +7,7 @@ import { Box, Rating, Button, Container, Typography } from '@mui/material'
 import NextImage from 'next/image'
 import Contents from '~/components/Item/Contents'
 import { useSession } from 'next-auth/react'
+import {getImageFromGcs} from 'lib/image'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -41,6 +42,59 @@ interface Params {
 
 export const UserPage: NextPage<Params> = ({ user }) => {
   const {data: session} = useSession()
+  const [image, setImage] = useState('')
+  const [isFollow , setIsFollow] = useState(false)
+  const handleFollow = async() => {
+    if (session?.user.id === user.id) {
+      console.log('自分自身はフォローできません')
+      return
+    }
+    const params = {
+      userId: session?.user.id,
+      targetUserId: user.id
+    }
+    const res = await executeQuery('Follow', params)
+    console.log(res)
+  }
+
+  const handleUnFollow = async() => {
+    console.log('フォロー解除します')
+    const params = {
+      userId: session?.user.id,
+      targetUserId: user.id
+    }
+    try {
+      await executeQuery('UnFollow', params)
+      setIsFollow(false)
+    } catch (e) {
+      console.log('error: ', e)
+    }
+  }
+  useEffect(() => {
+    const getImage = async () => {
+      if (user.image) {
+        const imageURL = await getImageFromGcs(String(user.image))
+        setImage(imageURL);
+      }
+    };
+    getImage();
+    }, [user.image]
+  )
+  useEffect(() => {
+    if (session?.user.image) {
+      const checkIsFollower = async () => {
+        const res = await executeQuery('Following', { userId: session?.user.id })
+        console.log("checkIsFollower", res)
+        const result = res.following.some((item: any) => item.targetUserID === user.id)
+        console.log()
+        if (result) {
+          setIsFollow(true)
+        }
+      }
+      checkIsFollower()
+    }
+  }, [session?.user])
+    
   if (!user) return <p>error</p>
   return (
     <>
@@ -52,9 +106,9 @@ export const UserPage: NextPage<Params> = ({ user }) => {
             height: { xs: '30px', sm: '80px' },
           }}
         >
-          {session?.user.image ? (
+          {image ? (
             <NextImage
-              src={String(session.user.image)}
+              src={String(image)}
               alt='user image'
               fill
               style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}
@@ -72,9 +126,17 @@ export const UserPage: NextPage<Params> = ({ user }) => {
           <p style={{ margin: '0' }}>{user.name}</p>
           <Rating readOnly value={user.assessment} size='small'></Rating>
         </Box>
-        <Button variant='outlined' color='error' size='small' sx={{ margin: '20px 0' }}>
+        {
+          isFollow ? (
+            <Button variant='outlined' color='error' size='small' sx={{ margin: '20px 0' }} onClick={handleUnFollow}>
+          フォロー解除
+        </Button>
+          ) : (
+            <Button variant='outlined' color='primary' size='small' sx={{ margin: '20px 0' }} onClick={handleFollow}>
           フォロー
         </Button>
+          )
+        }
       </Box>
       {user.ShopItem && (
         <Container sx={{ textAlign: 'center' }}>
