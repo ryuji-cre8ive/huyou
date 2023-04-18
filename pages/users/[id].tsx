@@ -42,7 +42,7 @@ interface Params {
 
 export const UserPage: NextPage<Params> = ({ user }) => {
   const { data: session } = useSession()
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState<string | null>()
   const [isFollow, setIsFollow] = useState(false)
   const handleFollow = async () => {
     if (session?.user.id === user.id) {
@@ -78,7 +78,7 @@ export const UserPage: NextPage<Params> = ({ user }) => {
       }
     }
     getImage()
-  }, [user.image])
+  }, [user])
   useEffect(() => {
     if (session?.user.image) {
       const checkIsFollower = async () => {
