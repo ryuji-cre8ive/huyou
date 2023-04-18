@@ -48,20 +48,18 @@ export const UserAccountPage: NextPage<Params> = ({ user }) => {
 
   if (!user) return <p>error</p>
   if (session?.user.id !== user.id) {
-    return (
-      <AccountProhibition />
-    )
+    return <AccountProhibition />
   }
   if (user.name === '')
     return (
       <>
-        <NameAndImageView message='初期登録を行なってください'/>
+        <NameAndImageView message='初期登録を行なってください' />
       </>
     )
   return (
     <>
       this is user account page for {user.name}
-      <NameAndImageView message='変更する場合は書き換えてください'/>
+      <NameAndImageView message='変更する場合は書き換えてください' />
     </>
   )
 }

@@ -24,7 +24,6 @@ const AccountButton = ({ onAccountButtonClick }: Props) => {
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (onAccountButtonClick()) {
       setAnchorEl(event.currentTarget)

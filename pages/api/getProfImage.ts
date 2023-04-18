@@ -27,8 +27,8 @@ export default async function handler(req: any, res: any) {
   try {
     const [url] = await file.getSignedUrl(options)
     return res.status(200).json({ url })
-  } catch(e) {
-    console.log("error: ",e)
+  } catch (e) {
+    console.log('error: ', e)
     handler(req, res)
   }
 }

@@ -3,7 +3,6 @@ import { TextField } from '@mui/material'
 import Image from 'next/image'
 import { Box, Grid } from '@mui/material'
 
-
 const ChangeAccountProfImage = (props: any) => {
   const { file, setFile } = props
   const [previewUrl, setPreviewUrl] = useState<String | null>(null)
@@ -63,7 +62,6 @@ const ChangeAccountProfImage = (props: any) => {
           />
         </Grid>
       </Grid>
-    
     </>
   )
 }

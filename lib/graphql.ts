@@ -17,7 +17,12 @@ type QueryType =
   | 'Following'
   | 'Followers'
 
-type MutationType = 'CreateUser' | 'CreateShopItem' | 'AppendNameForCreatedUser' | 'Follow' | 'UnFollow'
+type MutationType =
+  | 'CreateUser'
+  | 'CreateShopItem'
+  | 'AppendNameForCreatedUser'
+  | 'Follow'
+  | 'UnFollow'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

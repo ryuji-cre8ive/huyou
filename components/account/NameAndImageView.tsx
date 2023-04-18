@@ -15,7 +15,7 @@ interface Props {
   message?: string
 }
 
-const NameAndImageView = ({message}: Props) => {
+const NameAndImageView = ({ message }: Props) => {
   const { data: session } = useSession()
   const [name, setName] = useState<String | null>(null)
   const [file, setFile] = useState<File | null>(null)
@@ -31,15 +31,15 @@ const NameAndImageView = ({message}: Props) => {
         name: name,
         userID: session?.user.id,
       }
-      console.info("params: ", params)
+      console.info('params: ', params)
 
       const data: AppendNameForCreatedUserMutation = await executeQuery(
         'AppendNameForCreatedUser',
         params,
       )
-      console.log("data",data)
+      console.log('data', data)
       if (!data) {
-        alert("何かしらのエラーが発生しました。")
+        alert('何かしらのエラーが発生しました。')
         return
       }
       router.push('/users/account/' + data.appendNameForCreatedUser.id)
@@ -50,28 +50,27 @@ const NameAndImageView = ({message}: Props) => {
     }
   }
 
-  
-  return(
+  return (
     <>
-    <Box sx={{ textAlign: 'center', margin: '20px' }}>
-    <Typography variant='h5'>{message}</Typography>
-    <form
-      onSubmit={(event) => {
-        event.preventDefault()
-        if (file) {
-          handleSubmit(file)
-        } else {
-          alert('ファイルが選択されていません')
-        }
-      }}
-    >
-      <ChangeAccountProfImage file={file} setFile={setFile}/>
-      <ChangeAccountName setName={setName} name={name}/>
-      <LoadingButton loading={loading} variant='outlined' type='submit'>
-        Submit
-      </LoadingButton>
-    </form>
-  </Box>
+      <Box sx={{ textAlign: 'center', margin: '20px' }}>
+        <Typography variant='h5'>{message}</Typography>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            if (file) {
+              handleSubmit(file)
+            } else {
+              alert('ファイルが選択されていません')
+            }
+          }}
+        >
+          <ChangeAccountProfImage file={file} setFile={setFile} />
+          <ChangeAccountName setName={setName} name={name} />
+          <LoadingButton loading={loading} variant='outlined' type='submit'>
+            Submit
+          </LoadingButton>
+        </form>
+      </Box>
     </>
   )
 }
