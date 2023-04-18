@@ -101,3 +101,33 @@ mutation CreateShopItem($title: String!, $description: String, $image: String, $
       id
     }
   }
+
+query Following($userId: ID!) {
+  following(userId: $userId) {
+    id
+    targetUserID
+    targetUser {
+      name
+      id
+    }
+  }
+}
+
+query Followers($targetUserId: ID!) {
+  followers(targetUserId: $targetUserId) {
+    targetUser{
+      id
+      name
+    }
+  }
+}
+
+mutation Follow($userId: ID!, $targetUserId: ID!) {
+  follow(userId: $userId, targetUserId: $targetUserId) {
+    id
+  }
+}
+
+mutation UnFollow($userId: ID!, $targetUserId: ID!) {
+  unfollow(userId: $userId, targetUserId: $targetUserId)
+}
