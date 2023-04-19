@@ -80,12 +80,10 @@ export const UserPage: NextPage<Params> = ({ user }) => {
     getImage()
   }, [user])
   useEffect(() => {
-    if (session?.user.image) {
+    if (session?.user) {
       const checkIsFollower = async () => {
         const res = await executeQuery('Following', { userId: session?.user.id })
-        console.log('checkIsFollower', res)
         const result = res.following.some((item: any) => item.targetUserID === user.id)
-        console.log()
         if (result) {
           setIsFollow(true)
         }
