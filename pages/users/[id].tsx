@@ -8,6 +8,9 @@ import NextImage from 'next/image'
 import Contents from '~/components/Item/Contents'
 import { useSession } from 'next-auth/react'
 import { getImageFromGcs } from 'lib/image'
+import Following from '~/components/account/Follow'
+import Follow from '~/components/account/Follow'
+import ProfileTop from '~/components/account/ProfileTop'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -44,11 +47,10 @@ export const UserPage: NextPage<Params> = ({ user }) => {
   const { data: session } = useSession()
   const [image, setImage] = useState<string | null>()
   const [isFollow, setIsFollow] = useState(false)
+  const [isMyself, setIsMyself] = useState<boolean>(false)
+  const [followings, setFollowings] = useState<User[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const handleFollow = async () => {
-    if (session?.user.id === user.id) {
-      console.log('自分自身はフォローできません')
-      return
-    }
     const params = {
       userId: session?.user.id,
       targetUserId: user.id,
@@ -72,21 +74,33 @@ export const UserPage: NextPage<Params> = ({ user }) => {
   }
   useEffect(() => {
     const getImage = async () => {
-      if (user.image) {
-        const imageURL = await getImageFromGcs(String(user.image))
-        setImage(imageURL)
+      if (user) {
+        if (user.image) {
+          const imageURL = await getImageFromGcs(String(user.image))
+          setImage(imageURL)
+        } else {
+          setImage(null)
+        }
       }
     }
     getImage()
   }, [user])
   useEffect(() => {
+    setIsLoading(true)
     if (session?.user) {
+      if (session?.user.id === user.id) {
+        setIsMyself(true)
+        setIsLoading(false)
+        return
+      }
       const checkIsFollower = async () => {
         const res = await executeQuery('Following', { userId: session?.user.id })
+        setFollowings(res.following)
         const result = res.following.some((item: any) => item.targetUserID === user.id)
         if (result) {
           setIsFollow(true)
         }
+        setIsLoading(false)
       }
       checkIsFollower()
     }
@@ -95,55 +109,17 @@ export const UserPage: NextPage<Params> = ({ user }) => {
   if (!user) return <p>error</p>
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'center', margin: '50px' }}>
-        <Box
-          sx={{
-            position: 'relative',
-            width: { xs: '30px', sm: '80px' },
-            height: { xs: '30px', sm: '80px' },
-          }}
-        >
-          {image ? (
-            <NextImage
-              src={String(image)}
-              alt='user image'
-              fill
-              style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}
-            />
-          ) : (
-            <NextImage
-              src='/vercel.svg'
-              alt='user image'
-              fill
-              style={{ margin: '0 5%', backgroundColor: '#000', borderRadius: '50%' }}
-            />
-          )}
-        </Box>
-        <Box sx={{ margin: '10px 20px' }}>
-          <p style={{ margin: '0' }}>{user.name}</p>
-          <Rating readOnly value={user.assessment} size='small'></Rating>
-        </Box>
-        {isFollow ? (
-          <Button
-            variant='outlined'
-            color='error'
-            size='small'
-            sx={{ margin: '20px 0' }}
-            onClick={handleUnFollow}
-          >
-            フォロー解除
-          </Button>
-        ) : (
-          <Button
-            variant='outlined'
-            color='primary'
-            size='small'
-            sx={{ margin: '20px 0' }}
-            onClick={handleFollow}
-          >
-            フォロー
-          </Button>
-        )}
+      <ProfileTop
+        user={user}
+        handleFollow={handleFollow}
+        handleUnFollow={handleUnFollow}
+        image={image}
+        isMyself={isMyself}
+        isFollow={isFollow}
+        isLoading={isLoading}
+      />
+      <Box textAlign='center'>
+        <Follow user={user} />
       </Box>
       {user.ShopItem && (
         <Container sx={{ textAlign: 'center' }}>
