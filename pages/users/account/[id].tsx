@@ -9,7 +9,7 @@ import { useState, ChangeEvent, FormEvent } from 'react'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import router from 'next/router'
-import NameAndImageView from '~/components/account/NameAndImageView'
+import NameAndImageView from '~/components/account/ChangeNameAndImageView'
 import AccountProhibition from '~/components/account/AccountProhibition'
 
 export const getStaticPaths: GetStaticPaths = async () => {
