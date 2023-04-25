@@ -14,6 +14,7 @@ import { ShopItemsTopDocument } from '~/generated/graphql'
 const inter = Inter({ subsets: ['latin'] })
 import { client } from '../lib/graphql'
 import { useQuery } from 'urql'
+import ItemListSkeleton from '~/components/Item/ItemListSkeleton'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id)
@@ -42,7 +43,13 @@ const Home: NextPage<Params> = ({ items }) => {
   })
   const { data, fetching, error } = result
   if (fetching) {
-    return <p>fetching ...</p>
+    return (
+      <main style={{}}>
+        <Container sx={{ textAlign: 'center' }}>
+          <ItemListSkeleton />
+        </Container>
+      </main>
+    )
   }
   if (error) {
     return <p>error</p>
