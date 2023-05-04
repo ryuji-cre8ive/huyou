@@ -35,4 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
-huyou-375207-2229cfc09b23.json
+.env.local
+huyou-375207-ad77d48a8c6a.json
