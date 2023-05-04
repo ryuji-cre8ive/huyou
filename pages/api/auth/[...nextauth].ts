@@ -31,6 +31,9 @@ export const authOptions: AuthOptions = {
     }),
     // ...add more providers here
   ],
+  pages: {
+    signIn: '/auth/signin',
+  },
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async signIn({ user, account, profile, email, credentials, session }: any): Promise<any> {
