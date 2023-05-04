@@ -104,7 +104,7 @@ export const UserPage: NextPage<Params> = ({ user }) => {
       }
       checkIsFollower()
     }
-  }, [session?.user])
+  }, [session?.user, user.id])
 
   if (!user) return <p>error</p>
   return (
