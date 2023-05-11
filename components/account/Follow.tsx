@@ -27,7 +27,7 @@ const Follow = ({ user }: FollowingProps) => {
       setIsLoading(false) // fetch 完了後に loading ステートを更新する
     }
     fetchFollowings()
-  }, [user?.id])
+  }, [user?.id, user])
 
   return (
     <>
@@ -41,7 +41,7 @@ const Follow = ({ user }: FollowingProps) => {
             sx={{ margin: '0 auto' }}
           />
         ) : (
-          <Link href={'/users/' + user.id + '/follow'}>フォロー: {followings.length ?? 0}</Link>
+          <Link href={'/users/follow/' + user.id}>フォロー: {followings.length ?? 0}</Link>
         )}
       </Box>
     </>

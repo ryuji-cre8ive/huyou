@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { executeQuery } from 'lib/graphql'
 import { UserIDsQuery, FindUserQuery } from '~/generated/server'
 import type { User } from '~/generated/graphql'
-import { Box, Rating, Button, Container, Typography } from '@mui/material'
-import NextImage from 'next/image'
+import { Box, Container, Typography } from '@mui/material'
 import Contents from '~/components/Item/Contents'
 import { useSession } from 'next-auth/react'
 import { getImageFromGcs } from 'lib/image'
-import Following from '~/components/account/Follow'
 import Follow from '~/components/account/Follow'
 import ProfileTop from '~/components/account/ProfileTop'
+import Snackbar from '@mui/material/Snackbar';
+
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: UserIDsQuery = await executeQuery('UserIDs')
@@ -31,7 +31,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: { user: {} },
     }
   const data: FindUserQuery = await executeQuery('FindUser', { id: String(params.id) })
-  console.log('user', data.user)
   return {
     props: { user: data.user },
     revalidate: 1, // このページに変更があった場合にビルドやるよ
@@ -47,27 +46,27 @@ export const UserPage: NextPage<Params> = ({ user }) => {
   const { data: session } = useSession()
   const [image, setImage] = useState<string | null>()
   const [isFollow, setIsFollow] = useState(false)
-  const [isMyself, setIsMyself] = useState<boolean>(false)
-  const [followings, setFollowings] = useState<User[]>([])
+  // const [followings, setFollowings] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const handleFollow = async () => {
-    const params = {
-      userId: session?.user.id,
-      targetUserId: user.id,
-    }
-    const res = await executeQuery('Follow', params)
-    console.log(res)
-  }
+  const [open, setOpen] = useState<boolean>(false);
 
-  const handleUnFollow = async () => {
-    console.log('フォロー解除します')
+  const isMyself = session?.user.id === user?.id
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const handleFollowToggle = async () => {
+    setOpen(true)
     const params = {
       userId: session?.user.id,
       targetUserId: user.id,
     }
+    setIsFollow(!isFollow)
     try {
       await executeQuery('UnFollow', params)
-      setIsFollow(false)
     } catch (e) {
       console.log('error: ', e)
     }
@@ -87,37 +86,39 @@ export const UserPage: NextPage<Params> = ({ user }) => {
   }, [user])
   useEffect(() => {
     setIsLoading(true)
+    console.log(0)
     if (session?.user) {
-      if (session?.user.id === user.id) {
-        setIsMyself(true)
-        setIsLoading(false)
-        return
-      }
+      
       const checkIsFollower = async () => {
         const res = await executeQuery('Following', { userId: session?.user.id })
-        setFollowings(res.following)
-        const result = res.following.some((item: any) => item.targetUserID === user.id)
-        if (result) {
-          setIsFollow(true)
+        console.log('following', res.following)
+        // setFollowings(res.following)
+
+        if (res.following) {
+          const result = res.following.some((item: any) => item.targetUserID === user?.id)
+          if (result) {
+            setIsFollow(true)
+          }
         }
         setIsLoading(false)
       }
       checkIsFollower()
     }
-  }, [session?.user, user.id])
+  }, [session?.user, user?.id])
 
   if (!user) return <p>error</p>
   return (
     <>
       <ProfileTop
         user={user}
-        handleFollow={handleFollow}
-        handleUnFollow={handleUnFollow}
+        handleFollow={handleFollowToggle}
+        handleUnFollow={handleFollowToggle}
         image={image}
         isMyself={isMyself}
         isFollow={isFollow}
         isLoading={isLoading}
       />
+      <Snackbar open={open} onClose={handleClose} autoHideDuration={3000} message={(isFollow ? 'フォロー' : 'フォロー解除') + 'しました'}></Snackbar>
       <Box textAlign='center'>
         <Follow user={user} />
       </Box>
