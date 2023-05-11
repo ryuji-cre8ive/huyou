@@ -11,6 +11,8 @@ import { useSession } from 'next-auth/react'
 import AddContentButton from './AddContetnButton'
 import AccountButton from './account/AccountButton'
 
+import Link from 'next/link'
+
 interface Props {
   islogin: boolean
 }
@@ -120,19 +122,22 @@ const PrimarySearchAppBar: React.FC<Props> = ({ islogin }) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static'>
         <Toolbar>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{
-              display: {
-                xs: 'none',
-                sm: 'block',
-              },
-            }}
-          >
-            HUYOU
-          </Typography>
+          <Link href='/' style={{color: 'inherit'}}>
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{
+                display: {
+                  xs: 'none',
+                  sm: 'block',
+                },
+              }}
+            >
+              HUYOU
+            </Typography>
+          </Link>
+          
           <SearchBar message='hello world' />
           <Box sx={{ flexGrow: 1 }} />
           {islogin ? (
