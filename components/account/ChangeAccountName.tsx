@@ -6,7 +6,6 @@ const ChangeAccountName = (props: any) => {
 
   const handleSubmitName = (event: FormEvent<EventTarget & { value: String }>) => {
     const newName = event.currentTarget.value
-    console.log(newName)
     setName(newName)
   }
   return (

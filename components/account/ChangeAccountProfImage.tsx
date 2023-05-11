@@ -11,7 +11,6 @@ const ChangeAccountProfImage = (props: any) => {
     const selectedFile = event.target.files && event.target.files[0]
     if (!selectedFile) return
     setFile(selectedFile)
-    console.log(selectedFile)
     const reader = new FileReader()
     reader.onload = () => {
       setPreviewUrl(reader.result as string)
